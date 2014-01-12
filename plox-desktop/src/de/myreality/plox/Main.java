@@ -6,11 +6,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "plox";
+		cfg.title = "Plox v. 1.0";
 		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
+		cfg.width = 800;
+		cfg.height = 600;
 		
-		new LwjglApplication(new Game(), cfg);
+		new LwjglApplication(new PloxGame(), cfg);
 	}
 }
