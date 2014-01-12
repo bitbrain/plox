@@ -24,6 +24,11 @@ public class AlienStrategy implements GameObjectStrategy {
 		
 		final int speed = 100;
 		
+		if (vec.len() < 10) {
+			planet.damage(50);
+			target.kill();
+		}
+		
 		vec.nor();
 		
 		target.setX(target.getX() + vec.x * speed * delta);

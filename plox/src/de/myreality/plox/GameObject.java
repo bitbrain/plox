@@ -112,6 +112,10 @@ public class GameObject {
 		this.strategy = strategy;
 	}
 	
+	public void kill() {
+		currentLife = 0;
+	}
+	
 	public void setX(float x) {
 		this.x = x;
 	}

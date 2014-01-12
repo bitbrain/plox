@@ -185,10 +185,13 @@ public class IngameScreen implements Screen {
 		
 		public void collide(GameObject a, GameObject b) {
 			
-			if (a.getType().equals(GameObjectType.SHOT) && !a.getType().equals(GameObjectType.SHOT)) {
-				b.damage(20);
-				remove(a);
-			}
+			if (a.getType().equals(GameObjectType.SHOT) && !b.getType().equals(GameObjectType.SHOT)) {
+
+				if (!b.getType().equals(GameObjectType.PLAYER)) {
+					b.damage(40);
+					remove(a);
+				}
+			} 
 		}
 	}
 
