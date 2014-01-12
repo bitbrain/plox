@@ -7,11 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.myreality.plox.GameObject;
+import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.screens.IngameScreen;
+import de.myreality.plox.util.Timer;
 
 public class GameControls extends Stage implements InputProcessor {
 	
 	private IngameScreen screen;
+	
+	private Timer timer;
 	
 	/**
 	 * @param width
@@ -22,7 +26,7 @@ public class GameControls extends Stage implements InputProcessor {
 	public GameControls(float width, float height, boolean keepAspectRatio,
 			SpriteBatch batch, IngameScreen screen) {
 		super(width, height, keepAspectRatio, batch);
-		this.screen = screen;
+		this.screen = screen;		
 	}
 
 	/**
@@ -79,6 +83,33 @@ public class GameControls extends Stage implements InputProcessor {
 			
 			player.setX(player.getX() + vec.x * speed);
 			player.setY(player.getY() + vec.y * speed);
+		} else if (pointer == 1) {
+			
+			// Shooting
+			final int INTERVAL = 500;
+			boolean shoot = false;
+			
+			if (timer != null && timer.isRunning()) {
+				if (timer.getTicks() > INTERVAL) {
+					shoot = true;
+					timer.reset();
+				}
+			} else {
+				timer = new Timer();
+				shoot = true;
+				timer.start();
+			}
+			
+				
+			if (shoot) {
+				GameObjectFactory f = screen.getFactory();
+				GameObject p = screen.getPlayer();
+				GameObject shot = f.createShot(
+						(int)(p.getX() + p.getWidth() / 2f),
+						(int)(p.getY() + p.getHeight() / 2f), 
+						screenX, screenY, 1600f);
+				screen.add(shot);
+			}
 		}
 		
 		return true;

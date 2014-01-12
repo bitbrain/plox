@@ -4,24 +4,34 @@ import com.badlogic.gdx.Gdx;
 
 import de.myreality.plox.ai.AlienStrategy;
 import de.myreality.plox.ai.RotationStrategy;
+import de.myreality.plox.ai.TargetStrategy;
 
 public class GameObjectFactory {
 	
 	
-	public GameObject createAlien(int x, int y, GameObject player) {
+	public GameObject createAlien(int x, int y, GameObject player, Planet planet) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.ALIEN);		
-		object.setStrategy(new AlienStrategy(player));
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.ALIEN, GameObjectType.ALIEN);		
+		object.setStrategy(new AlienStrategy(player, planet));
 		return object;
 	}
 	
 	public GameObject createPlayer(int x, int y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.PLAYER);
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.PLAYER, GameObjectType.PLAYER);
 		object.setStrategy(new RotationStrategy());
+		return object;
+	}
+	
+	public GameObject createShot(int x, int y, int targetX, int targetY, float speed) {	
+		
+		int size = Gdx.graphics.getHeight() / 20;
+		
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.SHOT, GameObjectType.SHOT);		
+		object.setStrategy(new TargetStrategy(x, y, targetX, targetY, speed));
 		return object;
 	}
 	

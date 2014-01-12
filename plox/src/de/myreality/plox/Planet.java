@@ -18,7 +18,7 @@ public class Planet extends GameObject {
 	 * @param texture
 	 */
 	public Planet(float x, float y, int size, Texture texture) {
-		super(x, y, 200, size, size, texture);
+		super(x, y, 200, size, size, texture, GameObjectType.PLANET);
 		this.state = PlanetState.HEAL;
 	}
 

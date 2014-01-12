@@ -1,7 +1,7 @@
 package de.myreality.plox.screens;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,7 +16,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
+import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Planet;
+import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.input.GameControls;
 
 public class IngameScreen implements Screen {
@@ -36,13 +38,19 @@ public class IngameScreen implements Screen {
 	private GameObject player;
 	
 	private Sprite stars;
+	
+	private EnemyController controller;
+	
+	private CollisionHandler collisionHandler;
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.141176471f, 0.188235294f, 0.278431373f, 1f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		controller.update(delta);
 		camera.update();
+		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
@@ -52,11 +60,23 @@ public class IngameScreen implements Screen {
 		planet.draw(batch);
 		
 		for (GameObject o : objects) {
-			o.update(Gdx.graphics.getDeltaTime());
+			o.update(delta);
+			
+			for (GameObject other : objects) {
+				if (o.collidesWidth(other)) {
+					collisionHandler.collide(o, other);
+				}
+			}			
 			
 			if (o.getX() + o.getWidth() > 0 && o.getX() < Gdx.graphics.getWidth() 
 			 && o.getY() + o.getHeight() > 0 && o.getY() < Gdx.graphics.getHeight()) {			
 				o.draw(batch);
+			} else {
+				remove(o);
+			}
+			
+			if (o.getCurrentLife() < 1) {
+				remove(o);
 			}
 		}
 		batch.end();
@@ -77,10 +97,12 @@ public class IngameScreen implements Screen {
 
 	@Override
 	public void show() {
-		objects = new ArrayList<GameObject>();
+		objects = new CopyOnWriteArrayList<GameObject>();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
+		controller = new EnemyController(this);
 		objectFactory = new GameObjectFactory();		
+		collisionHandler = new CollisionHandler();
 		
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
@@ -95,6 +117,14 @@ public class IngameScreen implements Screen {
 	
 	public GameObject getPlayer() {
 		return player;
+	}
+	
+	public Planet getPlanet() {
+		return planet;
+	}
+	
+	public GameObjectFactory getFactory() {
+		return objectFactory;
 	}
 
 	@Override
@@ -121,6 +151,14 @@ public class IngameScreen implements Screen {
 		
 	}
 	
+	public void add(GameObject object) {
+		objects.add(object);
+	}
+	
+	public void remove(GameObject object) {
+		objects.remove(object);
+	}
+	
 	
 	private Texture generateStars(int width, int height) {
 		
@@ -140,6 +178,18 @@ public class IngameScreen implements Screen {
 		map.dispose();
 		return texture;
 		
+	}
+	
+	
+	private class CollisionHandler {
+		
+		public void collide(GameObject a, GameObject b) {
+			
+			if (a.getType().equals(GameObjectType.SHOT) && !a.getType().equals(GameObjectType.SHOT)) {
+				b.damage(20);
+				remove(a);
+			}
+		}
 	}
 
 }

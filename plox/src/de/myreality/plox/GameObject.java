@@ -14,6 +14,7 @@ public class GameObject {
 	private Texture texture;
 	private GameObjectStrategy strategy;
 	private float rotation;
+	private GameObjectType type;
 
 	/**
 	 * @param y
@@ -25,7 +26,7 @@ public class GameObject {
 	 * @param texture
 	 */
 	public GameObject(float x, float y, int maxLife,
-			int width, int height, Texture texture) {
+			int width, int height, Texture texture, GameObjectType type) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -34,6 +35,11 @@ public class GameObject {
 		this.width = width;
 		this.height = height;
 		this.texture = texture;
+		this.type = type;
+	}
+	
+	public GameObjectType getType() {
+		return type;
 	}
 
 	public float getX() {
@@ -68,6 +74,14 @@ public class GameObject {
 		}
 	}
 	
+	public float getCenterX() {
+		return getX() + getWidth() / 2f;
+	}
+	
+	public float getCenterY() {
+		return getY() + getHeight() / 2f;
+	}
+	
 	public void heal(int heal) {
 		currentLife += heal;
 		
@@ -87,7 +101,6 @@ public class GameObject {
 	}
 	
 	public void draw(SpriteBatch batch) {
-
 		batch.draw(texture, x, y, getWidth() / 2f, getHeight() / 2f, getWidth(), getHeight(), 1f, 1f, getRotation(), 0, 0, texture.getWidth(), texture.getHeight(), false, true);
 	}
 	

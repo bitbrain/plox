@@ -9,6 +9,7 @@ public final class Resources {
 	public static Texture PLANET_DESTROYED;
 	public static Texture ALIEN;
 	public static Texture PLAYER;
+	public static Texture SHOT;
 	
 	public static void load() {
 		
@@ -19,6 +20,7 @@ public final class Resources {
 		PLANET_DESTROYED = new Texture("data/planet-destroyed.png");
 		ALIEN = new Texture("data/alien.png");
 		PLAYER = new Texture("data/player.png");
+		SHOT = new Texture("data/shot.png");
 	}
 	
 	public static void dispose() {
@@ -37,6 +39,10 @@ public final class Resources {
 		
 		if (PLANET_DESTROYED != null) {
 			PLANET_DESTROYED.dispose();
+		}
+		
+		if (SHOT != null) {
+			SHOT.dispose();
 		}
 		
 		
