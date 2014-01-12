@@ -5,8 +5,13 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
@@ -29,6 +34,8 @@ public class IngameScreen implements Screen {
 	private GameObjectFactory objectFactory;
 	
 	private GameObject player;
+	
+	private Sprite stars;
 
 	@Override
 	public void render(float delta) {
@@ -38,6 +45,9 @@ public class IngameScreen implements Screen {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		
+		stars.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stars.draw(batch);
 		
 		planet.draw(batch);
 		
@@ -50,8 +60,6 @@ public class IngameScreen implements Screen {
 			}
 		}
 		batch.end();
-		
-		planet.damage(1);
 	}
 
 	@Override
@@ -60,11 +68,11 @@ public class IngameScreen implements Screen {
 			controls.setViewport(width, height);
 		} else {
 			controls = new GameControls(width, height, this);
-
 			Gdx.input.setInputProcessor(controls);
 		}
 		
 		camera.setToOrtho(true, width, height);
+		stars = new Sprite(generateStars(width, height));
 	}
 
 	@Override
@@ -72,7 +80,7 @@ public class IngameScreen implements Screen {
 		objects = new ArrayList<GameObject>();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
-		objectFactory = new GameObjectFactory();
+		objectFactory = new GameObjectFactory();		
 		
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
@@ -110,6 +118,27 @@ public class IngameScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	private Texture generateStars(int width, int height) {
+		
+		Pixmap map = new Pixmap(width, height, Format.RGBA8888);
+		map.setColor(Color.WHITE);
+		int starCount = 100;
+		
+		for (int i = 0; i < starCount; ++i) {
+		
+			int x = (int) Math.round((Math.random() * width));
+			int y = (int) Math.round((Math.random() * height));
+			int size = (int) (Math.random() * Gdx.graphics.getWidth() / 200);
+			map.fillRectangle(x, y, size, size);			
+		}		
+		
+		Texture texture = new Texture(map);
+		map.dispose();
+		return texture;
 		
 	}
 

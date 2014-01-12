@@ -47,36 +47,39 @@ public class GameControls extends Stage implements InputProcessor {
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 
-		super.touchDragged(screenX, screenY, pointer);		
+		super.touchDragged(screenX, screenY, pointer);	
 		
-		GameObject player = screen.getPlayer();
+		if (pointer == 0) {
 		
-		screenX -= player.getWidth() / 2f;
-		screenY -= player.getHeight() / 2f;
-		
-		if (screenX - player.getWidth() /2f < 0) {
-			screenX = 0;
+			GameObject player = screen.getPlayer();
+			
+			screenX -= player.getWidth() / 2f;
+			screenY -= player.getHeight() / 2f;
+			
+			if (screenX - player.getWidth() /2f < 0) {
+				screenX = 0;
+			}
+			
+			if (screenY - player.getHeight() /2f < 0) {
+				screenY = 0;
+			}
+			
+			if (screenX > Gdx.graphics.getWidth()) {
+				screenX = Gdx.graphics.getWidth();
+			}
+			
+			if (screenY > Gdx.graphics.getHeight()) {
+				screenY = Gdx.graphics.getHeight();
+			}
+			
+			Vector2 vec = new Vector2((float)screenX - player.getX(), (float)screenY - player.getY());		
+			
+			final float speed = vec.len() / 4f;
+			vec.nor();
+			
+			player.setX(player.getX() + vec.x * speed);
+			player.setY(player.getY() + vec.y * speed);
 		}
-		
-		if (screenY - player.getHeight() /2f < 0) {
-			screenY = 0;
-		}
-		
-		if (screenX > Gdx.graphics.getWidth()) {
-			screenX = Gdx.graphics.getWidth();
-		}
-		
-		if (screenY > Gdx.graphics.getHeight()) {
-			screenY = Gdx.graphics.getHeight();
-		}
-		
-		Vector2 vec = new Vector2((float)screenX - player.getX(), (float)screenY - player.getY());		
-		
-		final float speed = vec.len() / 4f;
-		vec.nor();
-		
-		player.setX(player.getX() + vec.x * speed);
-		player.setY(player.getY() + vec.y * speed);
 		
 		return true;
 	}
