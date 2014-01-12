@@ -1,6 +1,8 @@
 package de.myreality.plox.input;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -53,7 +55,7 @@ public class GameControls extends Stage implements InputProcessor {
 
 		super.touchDragged(screenX, screenY, pointer);	
 		
-		if (pointer == 0) {
+		if (pointer == 0 && !Gdx.app.getType().equals(ApplicationType.Desktop)) {
 		
 			GameObject player = screen.getPlayer();
 			
@@ -83,7 +85,7 @@ public class GameControls extends Stage implements InputProcessor {
 			
 			player.setX(player.getX() + vec.x * speed);
 			player.setY(player.getY() + vec.y * speed);
-		} else if (pointer == 1) {
+		} else if (Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
 			
 			// Shooting
 			final int INTERVAL = 500;

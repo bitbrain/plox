@@ -1,5 +1,8 @@
 package de.myreality.plox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -15,6 +18,7 @@ public class GameObject {
 	private GameObjectStrategy strategy;
 	private float rotation;
 	private GameObjectType type;
+	private List<GameObjectListener> listeners;
 
 	/**
 	 * @param y
@@ -36,6 +40,7 @@ public class GameObject {
 		this.height = height;
 		this.texture = texture;
 		this.type = type;
+		this.listeners = new ArrayList<GameObjectListener>();
 	}
 	
 	public GameObjectType getType() {
@@ -71,6 +76,12 @@ public class GameObject {
 		
 		if (currentLife < 0) {
 			currentLife = 0;
+		}
+		
+		if (damage == 0) {
+			for (GameObjectListener l : listeners) {
+				l.onKill(this);
+			}
 		}
 	}
 	
@@ -114,14 +125,23 @@ public class GameObject {
 	
 	public void kill() {
 		currentLife = 0;
+		for (GameObjectListener l : listeners) {
+			l.onKill(this);
+		}
 	}
 	
 	public void setX(float x) {
 		this.x = x;
+		for (GameObjectListener l : getListeners()) {
+			l.onMove(this);
+		}
 	}
 	
 	public void setY(float y) {
 		this.y = y;
+		for (GameObjectListener l : getListeners()) {
+			l.onMove(this);
+		}
 	}
 	
 	public int getHeight() {
@@ -139,6 +159,10 @@ public class GameObject {
 		}
 	}
 	
+	public List<GameObjectListener> getListeners() {
+		return listeners;
+	}
+	
 	public boolean collidesWidth(GameObject other) {
 		 float right = getX() + getWidth();
          float bottom = getY() + getHeight();
@@ -150,6 +174,10 @@ public class GameObject {
          boolean collisionY = otherBottom >= getY() && other.getY() <= bottom;
          
          return collisionX && collisionY;
+	}
+	
+	public void addListener(GameObjectListener listener) {
+		listeners.add(listener);
 	}
 	
 	

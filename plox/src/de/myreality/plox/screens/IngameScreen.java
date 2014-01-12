@@ -5,22 +5,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
+import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Planet;
 import de.myreality.plox.PloxGame;
 import de.myreality.plox.Resources;
 import de.myreality.plox.ai.EnemyController;
+import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.GameControls;
 
 public class IngameScreen implements Screen {
@@ -47,6 +47,8 @@ public class IngameScreen implements Screen {
 	
 	private PloxGame game;
 	
+	private ParticleRenderer particleRenderer;
+	
 	public IngameScreen(PloxGame game) {
 		this.game = game;
 	}
@@ -56,6 +58,23 @@ public class IngameScreen implements Screen {
 		Gdx.gl.glClearColor(0.141176471f, 0.188235294f, 0.278431373f, 1f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+			if (Gdx.app.getType().equals(ApplicationType.Desktop)) {
+			
+			GameObject player = getPlayer();
+			final int speed = (int) (580 * delta);
+			
+			if (Gdx.input.isKeyPressed(Keys.W)) {
+				player.setY(player.getY() - speed);
+			} else if (Gdx.input.isKeyPressed(Keys.S)) {
+				player.setY(player.getY() + speed);
+			}
+			
+			if (Gdx.input.isKeyPressed(Keys.A)) {
+				player.setX(player.getX() - speed);
+			} else if (Gdx.input.isKeyPressed(Keys.D)) {
+				player.setX(player.getX() + speed);
+			}
+		}
 		controller.update(delta);
 		camera.update();
 		
@@ -64,8 +83,9 @@ public class IngameScreen implements Screen {
 		
 		background.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		background.draw(batch);
-		
+
 		planet.draw(batch);
+		
 		
 		for (GameObject o : objects) {
 			o.update(delta);
@@ -84,9 +104,18 @@ public class IngameScreen implements Screen {
 			}
 			
 			if (o.getCurrentLife() < 1) {
+				
+				for (GameObjectListener l : o.getListeners()) {
+					l.onRemove(o);
+				}
+				
 				remove(o);
 			}
 		}
+		
+
+		particleRenderer.render(batch, delta);
+		
 		batch.end();
 		
 		if (player.isDead() || planet.isDead()) {
@@ -115,7 +144,7 @@ public class IngameScreen implements Screen {
 		controller = new EnemyController(this);
 		objectFactory = new GameObjectFactory();		
 		collisionHandler = new CollisionHandler();
-		
+		particleRenderer = new ParticleRenderer(this);
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
 		
@@ -165,6 +194,10 @@ public class IngameScreen implements Screen {
 	
 	public void add(GameObject object) {
 		objects.add(object);
+		object.addListener(particleRenderer);
+		for (GameObjectListener l : object.getListeners()) {
+			l.onAdd(object);
+		}
 	}
 	
 	public void remove(GameObject object) {
@@ -185,11 +218,17 @@ public class IngameScreen implements Screen {
 				if (!b.getType().equals(GameObjectType.PLAYER)) {
 					b.damage(40);
 					remove(a);
+					for (GameObjectListener l : a.getListeners()) {
+						l.onRemove(a);
+					}
 				}
 			}
 			
 			if (a.getType().equals(GameObjectType.ALIEN) && b.getType().equals(GameObjectType.PLAYER)) {
 				remove(a);
+				for (GameObjectListener l : a.getListeners()) {
+					l.onRemove(a);
+				}
 				b.damage(50);
 			}
 		}

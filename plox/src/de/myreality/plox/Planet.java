@@ -18,7 +18,7 @@ public class Planet extends GameObject {
 	 * @param texture
 	 */
 	public Planet(float x, float y, int size, Texture texture) {
-		super(x, y, 200, size, size, texture, GameObjectType.PLANET);
+		super(x, y, 300, size, size, texture, GameObjectType.PLANET);
 		this.state = PlanetState.HEAL;
 	}
 
@@ -33,9 +33,9 @@ public class Planet extends GameObject {
 		
 		super.damage(damage);
 		
-		if (getCurrentLife() <= 50 && oldLife > 50) {
+		if (getCurrentLife() <= 150 && oldLife > 150) {
 			state = PlanetState.BROKEN;
-		} else if (getCurrentLife() < 10) {
+		} else if (getCurrentLife() < 70) {
 			state = PlanetState.DESTROYED;
 		}
 	}
