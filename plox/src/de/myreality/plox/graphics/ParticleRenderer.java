@@ -94,6 +94,11 @@ public class ParticleRenderer  implements GameObjectListener{
 				effect = particleManager.create(Resources.PARTICLES_EXPLOSION, false);
 				effect.setPosition(object.getCenterX(), object.getCenterY());
 				effect.start();
+			} else {
+				effect = particleManager.create(Resources.PARTICLES_EXPLOSION_SMALL, false);
+				effect.setPosition(object.getCenterX(), object.getCenterY());
+				particleManager.setEndless(effect, false);
+				effect.start();
 			}
 		}
 	}
@@ -108,10 +113,12 @@ public class ParticleRenderer  implements GameObjectListener{
 	public void onMove(GameObject object) {
 		ParticleEffect effect = effects.get(object);
 		
-		if (object.getType().equals(GameObjectType.ALIEN)) {
-			effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
-		} else if (object.getType().equals(GameObjectType.SHOT)) {
-			effect.setPosition(object.getCenterX(), object.getCenterY());
+		if (effect != null) {		
+			if (object.getType().equals(GameObjectType.ALIEN)) {
+				effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
+			} else if (object.getType().equals(GameObjectType.SHOT)) {
+				effect.setPosition(object.getCenterX(), object.getCenterY());
+			}
 		}
 	}
 
@@ -126,6 +133,12 @@ public class ParticleRenderer  implements GameObjectListener{
 			ParticleEffect effect = particleManager.create(Resources.PARTICLES_SHOT, true);			
 			effects.put(object, effect);
 		}
+	}
+
+	@Override
+	public void onDamage(GameObject object) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	// ===========================================================

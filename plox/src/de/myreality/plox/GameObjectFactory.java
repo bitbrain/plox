@@ -1,5 +1,7 @@
 package de.myreality.plox;
 
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
 
 import de.myreality.plox.ai.AlienStrategy;
@@ -35,13 +37,13 @@ public class GameObjectFactory {
 		return object;
 	}
 	
-	public Planet createPlanet(int x, int y) {
+	public Planet createPlanet(int x, int y, TweenManager manager) {
 		
 		int size = Gdx.graphics.getWidth() / 3;
 		
 		x -= size / 2f;
 		y -= size / 2f;
 		
-		return new Planet(x, y, size, Resources.PLANET_HEAL);
+		return new Planet(x, y, size, Resources.PLANET_HEAL, manager);
 	}
 }

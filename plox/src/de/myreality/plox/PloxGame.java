@@ -4,8 +4,11 @@ import aurelienribon.tweenengine.Tween;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import de.myreality.plox.screens.MenuScreen;
+import de.myreality.plox.tweens.GameObjectTween;
+import de.myreality.plox.tweens.LabelTween;
 import de.myreality.plox.tweens.SpriteTween;
 
 public class PloxGame extends Game {
@@ -15,6 +18,8 @@ public class PloxGame extends Game {
 		Resources.load();
 		
 		Tween.registerAccessor(Sprite.class, new SpriteTween());
+		Tween.registerAccessor(Label.class, new LabelTween());
+		Tween.registerAccessor(GameObject.class, new GameObjectTween());
 		
 		setScreen(new MenuScreen(this));
 	}

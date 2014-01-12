@@ -2,6 +2,7 @@ package de.myreality.plox;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 public final class Resources {
@@ -19,7 +20,10 @@ public final class Resources {
 	
 	public static ParticleEffect PARTICLES_BLUE;	
 	public static ParticleEffect PARTICLES_SHOT;	
-	public static ParticleEffect PARTICLES_EXPLOSION;	
+	public static ParticleEffect PARTICLES_EXPLOSION;
+	public static ParticleEffect PARTICLES_EXPLOSION_SMALL;
+	
+	public static BitmapFont BITMAP_FONT_REGULAR;
 	
 	public static void load() {
 		
@@ -40,8 +44,7 @@ public final class Resources {
 		PARTICLES_BLUE.load(Gdx.files.internal("data/particle-blue"), 
                 Gdx.files.internal("data"));
 		
-		PARTICLES_SHOT = new ParticleEffect();
-		
+		PARTICLES_SHOT = new ParticleEffect();		
 		PARTICLES_SHOT.load(Gdx.files.internal("data/particle-shot"), 
                 Gdx.files.internal("data"));
 		
@@ -49,6 +52,12 @@ public final class Resources {
 		
 		PARTICLES_EXPLOSION.load(Gdx.files.internal("data/explosion"), 
                 Gdx.files.internal("data"));
+		
+PARTICLES_EXPLOSION_SMALL = new ParticleEffect();		
+PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"), 
+                Gdx.files.internal("data"));
+		
+		BITMAP_FONT_REGULAR = new BitmapFont(Gdx.files.internal("data/medium.fnt"), false);
 	}
 	
 	public static void dispose() {
@@ -99,6 +108,14 @@ public final class Resources {
 		
 		if (PARTICLES_EXPLOSION != null) {
 			PARTICLES_EXPLOSION.dispose();
+		}
+		
+		if (PARTICLES_EXPLOSION_SMALL != null) {
+			PARTICLES_EXPLOSION_SMALL.dispose();
+		}
+		
+		if (BITMAP_FONT_REGULAR != null) {
+			BITMAP_FONT_REGULAR.dispose();
 		}
 		
 	}

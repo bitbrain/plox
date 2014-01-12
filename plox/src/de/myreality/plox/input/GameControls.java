@@ -2,7 +2,6 @@ package de.myreality.plox.input;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -88,7 +87,7 @@ public class GameControls extends Stage implements InputProcessor {
 		} else if (Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
 			
 			// Shooting
-			final int INTERVAL = 500;
+			final int INTERVAL = 400;
 			boolean shoot = false;
 			
 			if (timer != null && timer.isRunning()) {

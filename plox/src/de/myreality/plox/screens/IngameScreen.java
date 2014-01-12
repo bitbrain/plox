@@ -3,10 +3,12 @@ package de.myreality.plox.screens;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -49,6 +51,8 @@ public class IngameScreen implements Screen {
 	
 	private ParticleRenderer particleRenderer;
 	
+	private TweenManager tweenManager;
+	
 	public IngameScreen(PloxGame game) {
 		this.game = game;
 	}
@@ -75,6 +79,8 @@ public class IngameScreen implements Screen {
 				player.setX(player.getX() + speed);
 			}
 		}
+			
+		tweenManager.update(delta);
 		controller.update(delta);
 		camera.update();
 		
@@ -138,10 +144,12 @@ public class IngameScreen implements Screen {
 
 	@Override
 	public void show() {
+
+		tweenManager = new TweenManager();
 		objects = new CopyOnWriteArrayList<GameObject>();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
-		controller = new EnemyController(this);
+		controller = new EnemyController(this, tweenManager);
 		objectFactory = new GameObjectFactory();		
 		collisionHandler = new CollisionHandler();
 		particleRenderer = new ParticleRenderer(this);
@@ -153,7 +161,7 @@ public class IngameScreen implements Screen {
 		player.setY(centerY - player.getHeight() / 2f);
 		objects.add(player);
 		
-		planet = objectFactory.createPlanet(Math.round(centerX), Math.round(centerY));		
+		planet = objectFactory.createPlanet(Math.round(centerX), Math.round(centerY), tweenManager);		
 	}
 	
 	public GameObject getPlayer() {

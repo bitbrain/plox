@@ -78,6 +78,10 @@ public class GameObject {
 			currentLife = 0;
 		}
 		
+		for (GameObjectListener l : listeners) {
+			l.onDamage(this);
+		}
+		
 		if (damage == 0) {
 			for (GameObjectListener l : listeners) {
 				l.onKill(this);

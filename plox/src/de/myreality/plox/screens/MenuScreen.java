@@ -8,9 +8,13 @@ import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import de.myreality.plox.PloxGame;
 import de.myreality.plox.Resources;
@@ -26,6 +30,8 @@ public class MenuScreen implements Screen {
 	private float logoWidth, logoHeight;
 	private TweenManager tweenManager;
 	private boolean lastTouched = true;
+	
+	private Stage stage;
 	
 	public MenuScreen(PloxGame game) {
 		this.game = game;
@@ -44,6 +50,8 @@ public class MenuScreen implements Screen {
 		
 		logo.draw(batch);
 		batch.end();
+
+		stage.draw();
 		
 		if (!lastTouched && Gdx.input.isTouched()) {
 			game.setScreen(new IngameScreen(game));
@@ -54,8 +62,20 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		if (stage != null) {
+			stage.setViewport(width, height);
+		} else {
+			stage = new Stage();
+			
+			LabelStyle style = new LabelStyle();
+			style.font = Resources.BITMAP_FONT_REGULAR;
+			style.fontColor = Color.WHITE;
+			Label text = new Label("Touch to start", style);
+			text.setX(width / 2 - text.getWidth() / 2);
+			text.setY(height / 5);
+			stage.addActor(text);
+			animateLabel(text);
+		}
 	}
 
 	@Override
@@ -78,6 +98,22 @@ public class MenuScreen implements Screen {
 		animateLogo();
 	}
 	
+	private void animateLabel(final Label label) {
+		Tween.to(label, SpriteTween.BOUNCE, 0.5f)
+        .target(0f)
+        .ease(TweenEquations.easeInOutQuad)
+        .setCallback(new TweenCallback() {
+
+			@Override
+			public void onEvent(int type, BaseTween<?> source) {
+				animateLabel(label);
+			}
+        	
+        })
+        .setCallbackTriggers(TweenCallback.COMPLETE)
+        .repeatYoyo(1, 0).start(tweenManager);
+	}
+	
 	private void animateLogo() {
 		Tween.to(logo, SpriteTween.BOUNCE, 1)
         .target(Gdx.graphics.getHeight() - logo.getHeight() - 30)
@@ -92,6 +128,8 @@ public class MenuScreen implements Screen {
         })
         .setCallbackTriggers(TweenCallback.COMPLETE)
         .repeatYoyo(1, 0).start(tweenManager);
+		
+		
 	}
 
 	@Override

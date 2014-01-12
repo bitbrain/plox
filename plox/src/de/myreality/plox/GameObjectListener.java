@@ -9,4 +9,6 @@ public interface GameObjectListener {
 	void onMove(GameObject object);
 	
 	void onAdd(GameObject object);
+	
+	void onDamage(GameObject object);
 }
