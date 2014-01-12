@@ -3,6 +3,7 @@ package de.myreality.plox;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,6 +20,7 @@ public class GameObject {
 	private float rotation;
 	private GameObjectType type;
 	private List<GameObjectListener> listeners;
+	private Color color;
 
 	/**
 	 * @param y
@@ -41,6 +43,7 @@ public class GameObject {
 		this.texture = texture;
 		this.type = type;
 		this.listeners = new ArrayList<GameObjectListener>();
+		color = new Color(1f, 1f, 1f, 1f);
 	}
 	
 	public GameObjectType getType() {
@@ -97,6 +100,14 @@ public class GameObject {
 		return getY() + getHeight() / 2f;
 	}
 	
+	public Color getColor() {
+		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	public void heal(int heal) {
 		currentLife += heal;
 		
@@ -116,7 +127,9 @@ public class GameObject {
 	}
 	
 	public void draw(SpriteBatch batch) {
+		batch.setColor(color.r, color.g, color.b, color.a);
 		batch.draw(texture, x, y, getWidth() / 2f, getHeight() / 2f, getWidth(), getHeight(), 1f, 1f, getRotation(), 0, 0, texture.getWidth(), texture.getHeight(), false, true);
+		
 	}
 	
 	public int getWidth() {

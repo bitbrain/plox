@@ -3,6 +3,10 @@ package de.myreality.plox.screens;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -13,6 +17,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
@@ -24,6 +29,8 @@ import de.myreality.plox.Resources;
 import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.GameControls;
+import de.myreality.plox.tweens.GameObjectTween;
+import de.myreality.plox.tweens.SpriteTween;
 
 public class IngameScreen implements Screen {
 	
@@ -53,6 +60,16 @@ public class IngameScreen implements Screen {
 	
 	private TweenManager tweenManager;
 	
+	private Label pointLabel;
+	
+	private Sprite gameOver;
+	
+	private boolean over;
+	
+	private boolean fadeActivated;
+	
+	private int fadeCount = 0;
+	
 	public IngameScreen(PloxGame game) {
 		this.game = game;
 	}
@@ -62,7 +79,7 @@ public class IngameScreen implements Screen {
 		Gdx.gl.glClearColor(0.141176471f, 0.188235294f, 0.278431373f, 1f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-			if (Gdx.app.getType().equals(ApplicationType.Desktop)) {
+			if (Gdx.app.getType().equals(ApplicationType.Desktop) && !over) {
 			
 			GameObject player = getPlayer();
 			final int speed = (int) (580 * delta);
@@ -80,8 +97,44 @@ public class IngameScreen implements Screen {
 			}
 		}
 			
+		if (over && !fadeActivated) {
+			fadeActivated = true;
+			
+			particleRenderer.clear();
+			
+			for (GameObject o : objects) {
+				Tween.to(o, GameObjectTween.ALPHA, 2f)
+		        .target(0.3f).setCallback(new TweenCallback() {
+					@Override
+					public void onEvent(int type, BaseTween<?> source) {
+						fadeCount++;
+					}		        	
+		        })
+		        .ease(TweenEquations.easeInOutQuad).start(tweenManager);
+			}
+			
+			Tween.to(planet, GameObjectTween.ALPHA, 2f)
+	        .target(0.3f).setCallback(new TweenCallback() {
+				@Override
+				public void onEvent(int type, BaseTween<?> source) {
+					fadeCount++;
+				}		        	
+	        })
+	        .ease(TweenEquations.easeInOutQuad).start(tweenManager);
+			
+			Tween.to(gameOver, SpriteTween.ALPHA, 2f)
+	        .target(1.0f).ease(TweenEquations.easeInOutQuad).start(tweenManager);		
+			Tween.to(gameOver, SpriteTween.BOUNCE, 2f)
+	        .target(Gdx.graphics.getHeight() / 2f - gameOver.getHeight() / 2f)
+	        .ease(TweenEquations.easeInOutBounce).start(tweenManager);
+		}
+			
 		tweenManager.update(delta);
-		controller.update(delta);
+		
+		if (!over) {
+			controller.update(delta);
+		}
+		
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
@@ -92,12 +145,14 @@ public class IngameScreen implements Screen {
 
 		planet.draw(batch);
 		
-		
 		for (GameObject o : objects) {
-			o.update(delta);
+			
+			if (!fadeActivated) {
+				o.update(delta);
+			}
 			
 			for (GameObject other : objects) {
-				if (o.collidesWidth(other)) {
+				if (o.collidesWidth(other) && !fadeActivated) {
 					collisionHandler.collide(o, other);
 				}
 			}			
@@ -109,7 +164,7 @@ public class IngameScreen implements Screen {
 				remove(o);
 			}
 			
-			if (o.getCurrentLife() < 1) {
+			if (o.getCurrentLife() < 1 && !fadeActivated) {
 				
 				for (GameObjectListener l : o.getListeners()) {
 					l.onRemove(o);
@@ -122,10 +177,18 @@ public class IngameScreen implements Screen {
 
 		particleRenderer.render(batch, delta);
 		
+		if (fadeActivated) {
+			gameOver.draw(batch);
+		}
+		
 		batch.end();
 		
 		if (player.isDead() || planet.isDead()) {
 			gameover();
+		}
+		
+		if (fadeCount >= objects.size() && Gdx.input.isTouched()) {
+			game.setScreen(new MenuScreen(game));
 		}
 	}
 
@@ -155,10 +218,17 @@ public class IngameScreen implements Screen {
 		particleRenderer = new ParticleRenderer(this);
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
+		gameOver = new Sprite(Resources.GAMEOVER);
+		gameOver.flip(false, true);
+		float scaleFactor = Gdx.graphics.getWidth() / 800f;
+		gameOver.setBounds(0, 0, gameOver.getWidth() * scaleFactor, gameOver.getHeight() * scaleFactor);
+		gameOver.setPosition(Gdx.graphics.getWidth() / 2 - gameOver.getWidth() / 2, 
+				 			 0);
+		gameOver.setColor(gameOver.getColor().r, gameOver.getColor().g, gameOver.getColor().b, 0f);
 		
 		player = objectFactory.createPlayer(0, 0);
 		player.setX(centerX - player.getWidth() / 2f);
-		player.setY(centerY - player.getHeight() / 2f);
+		player.setY(player.getHeight() / 2f);
 		objects.add(player);
 		
 		planet = objectFactory.createPlanet(Math.round(centerX), Math.round(centerY), tweenManager);		
@@ -213,7 +283,7 @@ public class IngameScreen implements Screen {
 	}
 
 	public void gameover() {
-		game.setScreen(new MenuScreen(game));
+		over = true;
 	}
 		
 	
@@ -241,5 +311,8 @@ public class IngameScreen implements Screen {
 			}
 		}
 	}
+
+
+	
 
 }

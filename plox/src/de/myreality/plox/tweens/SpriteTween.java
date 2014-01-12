@@ -7,13 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class SpriteTween implements TweenAccessor<Sprite> {
 	
 	public static final int BOUNCE = 1;
-
+	public static final int ALPHA = 2;
 	@Override
 	public int getValues(Sprite target, int tweenType, float[] returnValues) {
 		 switch (tweenType) {
          case BOUNCE:
                  returnValues[0] = target.getY();
                  return 1;
+         case ALPHA:
+	        	 returnValues[0] = target.getColor().a;
+	             return 1;
          default:
                  return 0;
          }
@@ -25,6 +28,9 @@ public class SpriteTween implements TweenAccessor<Sprite> {
 	         case BOUNCE:
 	                 target.setY(newValues[0]);
 	                 break;
+	         case ALPHA:
+                 target.setColor(target.getColor().r, target.getColor().g, target.getColor().b, newValues[0]);
+                 break;
 		 }
 	}
 

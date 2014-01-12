@@ -81,6 +81,10 @@ public class ParticleRenderer  implements GameObjectListener{
 	public void render(SpriteBatch batch, float delta) {
 		particleManager.render(batch, delta);
 	}
+	
+	public void clear() {
+		particleManager.clear();
+	}
 
 	@Override
 	public void onRemove(GameObject object) {

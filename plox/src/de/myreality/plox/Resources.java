@@ -17,6 +17,7 @@ public final class Resources {
 	public static Texture BUTTON;
 	public static Texture BACKGROUND;
 	public static Texture BACKGROUND_INGAME;
+	public static Texture GAMEOVER;
 	
 	public static ParticleEffect PARTICLES_BLUE;	
 	public static ParticleEffect PARTICLES_SHOT;	
@@ -37,7 +38,7 @@ public final class Resources {
 		BUTTON = new Texture("data/button.png");
 		BACKGROUND = new Texture("data/background.png");
 		BACKGROUND_INGAME = new Texture("data/background-ingame.png");
-		
+		GAMEOVER = new Texture("data/gameover.png");
 		PARTICLES_BLUE = new ParticleEffect();
 
 		
@@ -84,6 +85,10 @@ PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"),
 		
 		if (LOGO != null) {
 			LOGO.dispose();
+		}
+		
+		if (GAMEOVER != null) {
+			GAMEOVER.dispose();
 		}
 		
 		if (BUTTON != null) {

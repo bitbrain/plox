@@ -93,6 +93,14 @@ public class ParticleManager {
 			}
 		}
 	}
+	
+	public void clear() {
+		for (Entry<ParticleEffect, Boolean> entries : effects.entrySet()) {
+			entries.getKey().setDuration(0);
+		}
+		
+		effects.clear();
+	}
 
 	// ===========================================================
 	// Inner classes
