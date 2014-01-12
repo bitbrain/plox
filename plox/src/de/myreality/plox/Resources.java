@@ -10,10 +10,11 @@ public final class Resources {
 	public static Texture ALIEN;
 	public static Texture PLAYER;
 	public static Texture SHOT;
-	
+	public static Texture LOGO;
+	public static Texture BUTTON;
+	public static Texture BACKGROUND;
+	public static Texture BACKGROUND_INGAME;
 	public static void load() {
-		
-		dispose();
 		
 		PLANET_HEAL = new Texture("data/planet-heal.png");
 		PLANET_BROKEN = new Texture("data/planet-broken.png");
@@ -21,6 +22,10 @@ public final class Resources {
 		ALIEN = new Texture("data/alien.png");
 		PLAYER = new Texture("data/player.png");
 		SHOT = new Texture("data/shot.png");
+		LOGO = new Texture("data/logo.png");
+		BUTTON = new Texture("data/button.png");
+		BACKGROUND = new Texture("data/background.png");
+		BACKGROUND_INGAME = new Texture("data/background-ingame.png");
 	}
 	
 	public static void dispose() {
@@ -34,7 +39,7 @@ public final class Resources {
 		}
 		
 		if (ALIEN != null) {
-			//ALIEN.dispose();
+			ALIEN.dispose();
 		}
 		
 		if (PLANET_DESTROYED != null) {
@@ -43,6 +48,22 @@ public final class Resources {
 		
 		if (SHOT != null) {
 			SHOT.dispose();
+		}
+		
+		if (LOGO != null) {
+			LOGO.dispose();
+		}
+		
+		if (BUTTON != null) {
+			BUTTON.dispose();
+		}
+		
+		if (BACKGROUND != null) {
+			BACKGROUND.dispose();
+		}
+		
+		if (BACKGROUND_INGAME != null) {
+			BACKGROUND_INGAME.dispose();
 		}
 		
 		

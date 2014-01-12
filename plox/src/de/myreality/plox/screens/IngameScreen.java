@@ -18,6 +18,8 @@ import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Planet;
+import de.myreality.plox.PloxGame;
+import de.myreality.plox.Resources;
 import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.input.GameControls;
 
@@ -37,11 +39,17 @@ public class IngameScreen implements Screen {
 	
 	private GameObject player;
 	
-	private Sprite stars;
+	private Sprite background;
 	
 	private EnemyController controller;
 	
 	private CollisionHandler collisionHandler;
+	
+	private PloxGame game;
+	
+	public IngameScreen(PloxGame game) {
+		this.game = game;
+	}
 
 	@Override
 	public void render(float delta) {
@@ -54,8 +62,8 @@ public class IngameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		stars.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		stars.draw(batch);
+		background.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		background.draw(batch);
 		
 		planet.draw(batch);
 		
@@ -80,6 +88,10 @@ public class IngameScreen implements Screen {
 			}
 		}
 		batch.end();
+		
+		if (player.isDead() || planet.isDead()) {
+			gameover();
+		}
 	}
 
 	@Override
@@ -92,7 +104,7 @@ public class IngameScreen implements Screen {
 		}
 		
 		camera.setToOrtho(true, width, height);
-		stars = new Sprite(generateStars(width, height));
+		background = new Sprite(Resources.BACKGROUND_INGAME);
 	}
 
 	@Override
@@ -158,28 +170,11 @@ public class IngameScreen implements Screen {
 	public void remove(GameObject object) {
 		objects.remove(object);
 	}
-	
-	
-	private Texture generateStars(int width, int height) {
-		
-		Pixmap map = new Pixmap(width, height, Format.RGBA8888);
-		map.setColor(Color.WHITE);
-		int starCount = 100;
-		
-		for (int i = 0; i < starCount; ++i) {
-		
-			int x = (int) Math.round((Math.random() * width));
-			int y = (int) Math.round((Math.random() * height));
-			int size = (int) (Math.random() * Gdx.graphics.getWidth() / 200);
-			map.fillRectangle(x, y, size, size);			
-		}		
-		
-		Texture texture = new Texture(map);
-		map.dispose();
-		return texture;
-		
+
+	public void gameover() {
+		game.setScreen(new MenuScreen(game));
 	}
-	
+		
 	
 	private class CollisionHandler {
 		
@@ -191,7 +186,12 @@ public class IngameScreen implements Screen {
 					b.damage(40);
 					remove(a);
 				}
-			} 
+			}
+			
+			if (a.getType().equals(GameObjectType.ALIEN) && b.getType().equals(GameObjectType.PLAYER)) {
+				remove(a);
+				b.damage(50);
+			}
 		}
 	}
 

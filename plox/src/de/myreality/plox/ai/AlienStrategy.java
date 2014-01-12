@@ -12,6 +12,8 @@ public class AlienStrategy implements GameObjectStrategy {
 	
 	private Planet planet;
 	
+	private float time;
+	
 	public AlienStrategy(GameObject player, Planet planet) {
 		this.player = player;
 		this.planet = planet;
@@ -31,8 +33,11 @@ public class AlienStrategy implements GameObjectStrategy {
 		
 		vec.nor();
 		
+		time += delta * 4;
+		float bounceFactor = (float) Math.cos(time) * 2;
+		
 		target.setX(target.getX() + vec.x * speed * delta);
-		target.setY(target.getY() + vec.y * speed * delta);		
+		target.setY(target.getY() + vec.y * speed * delta - bounceFactor);		
 	}
 
 }
