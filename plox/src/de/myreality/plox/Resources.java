@@ -14,7 +14,8 @@ public final class Resources {
 	public static Texture PLAYER;
 	public static Texture SHOT;
 	public static Texture LOGO;
-	public static Texture BUTTON;
+	public static Texture BUTTON_RANK;
+	public static Texture BUTTON_ACHIEVEMENTS;
 	public static Texture BACKGROUND;
 	public static Texture BACKGROUND_INGAME;
 	public static Texture GAMEOVER;
@@ -35,7 +36,8 @@ public final class Resources {
 		PLAYER = new Texture("data/player.png");
 		SHOT = new Texture("data/shot.png");
 		LOGO = new Texture("data/logo.png");
-		BUTTON = new Texture("data/button.png");
+		BUTTON_RANK = new Texture("data/button-rank.png");
+		BUTTON_ACHIEVEMENTS = new Texture("data/button-achievements.png");
 		BACKGROUND = new Texture("data/background.png");
 		BACKGROUND_INGAME = new Texture("data/background-ingame.png");
 		GAMEOVER = new Texture("data/gameover.png");
@@ -91,8 +93,8 @@ PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"),
 			GAMEOVER.dispose();
 		}
 		
-		if (BUTTON != null) {
-			BUTTON.dispose();
+		if (BUTTON_RANK != null) {
+			BUTTON_RANK.dispose();
 		}
 		
 		if (BACKGROUND != null) {

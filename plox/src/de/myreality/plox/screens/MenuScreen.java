@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
@@ -30,7 +31,6 @@ public class MenuScreen implements Screen {
 	private float logoWidth, logoHeight;
 	private TweenManager tweenManager;
 	private boolean lastTouched = true;
-	
 	private Stage stage;
 	
 	public MenuScreen(PloxGame game) {
@@ -75,6 +75,15 @@ public class MenuScreen implements Screen {
 			text.setY(height / 5);
 			stage.addActor(text);
 			animateLabel(text);
+			
+			Image imgWorldlist = new Image(Resources.BUTTON_RANK);			
+			stage.addActor(imgWorldlist);
+			imgWorldlist.setScale(4f);
+            imgWorldlist.setPosition(80, 80);            
+            Image imgAchievements = new Image(Resources.BUTTON_ACHIEVEMENTS);			
+			stage.addActor(imgAchievements);
+			imgAchievements.setScale(4f);
+			imgAchievements.setPosition(Gdx.graphics.getWidth() - 80 - imgAchievements.getWidth() * 4, 80);
 		}
 	}
 

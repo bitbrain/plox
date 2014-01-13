@@ -34,6 +34,7 @@ import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.GameControls;
 import de.myreality.plox.tweens.GameObjectTween;
+import de.myreality.plox.tweens.LabelTween;
 import de.myreality.plox.tweens.SpriteTween;
 import de.myreality.plox.ui.ScoreLabel;
 
@@ -110,7 +111,6 @@ public class IngameScreen implements Screen {
 
 		if (over && !fadeActivated) {
 			fadeActivated = true;
-			controls.clear();
 			particleRenderer.clear();
 
 			for (GameObject o : objects) {
@@ -123,6 +123,8 @@ public class IngameScreen implements Screen {
 						}).ease(TweenEquations.easeInOutQuad)
 						.start(tweenManager);
 			}
+			((ScoreLabel)pointLabel).reset();
+			pointLabel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 4);
 
 			Tween.to(planet, GameObjectTween.ALPHA, 2f).target(0.3f)
 					.setCallback(new TweenCallback() {
@@ -218,7 +220,8 @@ public class IngameScreen implements Screen {
 			labelStyle.font = Resources.BITMAP_FONT_REGULAR;
 			labelStyle.fontColor = new Color(1f, 1f, 1f, 1f);
 			pointLabel = new ScoreLabel(playerScore, tweenManager, labelStyle);
-			pointLabel.setPosition(50, Gdx.graphics.getHeight() - pointLabel.getHeight() - 50);
+			pointLabel.setPosition(80, Gdx.graphics.getHeight() - pointLabel.getHeight() - 80);
+			pointLabel.setFontScale(2f);
 			controls.addActor(pointLabel);
 			
 			Gdx.input.setInputProcessor(controls);

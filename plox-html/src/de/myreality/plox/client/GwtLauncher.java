@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 
 import de.myreality.plox.PloxGame;
+import de.myreality.plox.google.DesktopInterface;
 
 public class GwtLauncher extends GwtApplication {
 	@Override
@@ -15,6 +16,6 @@ public class GwtLauncher extends GwtApplication {
 
 	@Override
 	public ApplicationListener getApplicationListener () {
-		return new PloxGame();
+		return new PloxGame(new DesktopInterface());
 	}
 }

@@ -20,11 +20,19 @@ public class ScoreLabel extends Label {
 	private int currentPoints;
     
     private boolean fadingAllowed;
+    
+    public ScoreLabel(Scoreable scoreable, LabelStyle style) {
+    	this(scoreable, null, style);
+    }
 	
 	public ScoreLabel(Scoreable scoreable, TweenManager tweenManager, LabelStyle style) {
 		super("", style);
 		this.scoreable = scoreable;
 		this.tweenManager = tweenManager;
+	}
+	
+	public void reset() {
+		currentPoints = 0;
 	}
 
 	@Override
@@ -32,7 +40,7 @@ public class ScoreLabel extends Label {
             
             if (currentPoints < scoreable.getScore()) {
                     
-                    if (fadingAllowed) {
+                    if (fadingAllowed && tweenManager != null) {
                             tweenManager.killTarget(this);
                             Color c = getColor();
                             setColor(c.r, c.g, c.b, 1f);

@@ -3,6 +3,8 @@ package de.myreality.plox;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import de.myreality.plox.google.DesktopInterface;
+
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
@@ -11,6 +13,6 @@ public class Main {
 		cfg.width = 1920;
 		cfg.height = 1080;
 		
-		new LwjglApplication(new PloxGame(), cfg);
+		new LwjglApplication(new PloxGame(new DesktopInterface()), cfg);
 	}
 }
