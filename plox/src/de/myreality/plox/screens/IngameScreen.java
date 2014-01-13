@@ -135,14 +135,14 @@ public class IngameScreen implements Screen {
 						public void onEvent(int type, BaseTween<?> source) {
 							fadeCount++;
 						}
-					}).ease(TweenEquations.easeInOutQuad).start(tweenManager);
+					}).ease(TweenEquations.easeOutQuad).start(tweenManager);
 
-			Tween.to(gameOver, SpriteTween.ALPHA, 2f).target(1.0f)
+			Tween.to(gameOver, SpriteTween.ALPHA, 0.6f).target(1.0f)
 					.ease(TweenEquations.easeInOutQuad).start(tweenManager);
-			Tween.to(gameOver, SpriteTween.BOUNCE, 2f)
+			Tween.to(gameOver, SpriteTween.BOUNCE, 0.6f)
 					.target(Gdx.graphics.getHeight() / 3f
 							- gameOver.getHeight() / 2f)
-					.ease(TweenEquations.easeInOutBounce).start(tweenManager);
+					.ease(TweenEquations.easeOutBounce).start(tweenManager);
 		}
 
 		tweenManager.update(delta);
@@ -151,7 +151,8 @@ public class IngameScreen implements Screen {
 		if (!over) {
 			controller.update(delta);
 		} else {
-			pointLabel.setPosition(Gdx.graphics.getWidth() / 2 - pointLabel.getWidth(), Gdx.graphics.getHeight() / 3);
+			pointLabel.setColor(Color.WHITE);
+			pointLabel.setPosition(Gdx.graphics.getWidth() / 2 - pointLabel.getPrefWidth() / 2f, Gdx.graphics.getHeight() / 3);
 		}
 
 		camera.update();
@@ -209,7 +210,7 @@ public class IngameScreen implements Screen {
 			gameover();
 		}
 
-		if (fadeCount >= objects.size() && Gdx.input.isTouched()) {
+		if (fadeCount >= objects.size() && (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.BACK))) {
 			game.setScreen(new MenuScreen(game));
 		}
 	}

@@ -7,6 +7,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -60,6 +61,10 @@ public class MenuScreen implements Screen {
 			game.setScreen(new IngameScreen(game));
 		}
 		
+		if (Gdx.input.isKeyPressed(Keys.BACK)) {
+			Gdx.app.exit();
+		}
+		
 		lastTouched = Gdx.input.isTouched();
 	}
 
@@ -85,7 +90,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+		Gdx.input.setCatchBackKey(true);
 		tweenManager = new TweenManager();
 		background = new Sprite(Resources.BACKGROUND);
 		logo = new Sprite(Resources.LOGO);

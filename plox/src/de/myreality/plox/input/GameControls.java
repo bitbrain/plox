@@ -2,6 +2,7 @@ package de.myreality.plox.input;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +29,7 @@ public class GameControls extends Stage implements InputProcessor {
 			SpriteBatch batch, IngameScreen screen) {
 		super(width, height, keepAspectRatio, batch);
 		this.screen = screen;		
+		 Gdx.input.setCatchBackKey(true);
 	}
 
 	/**
@@ -47,6 +49,22 @@ public class GameControls extends Stage implements InputProcessor {
 	public GameControls(float width, float height, IngameScreen screen) {
 		super(width, height);
 		this.screen = screen;
+	}
+	
+	
+
+	@Override
+	public boolean keyDown(int keyCode) {
+		boolean value = super.keyDown(keyCode);
+		
+		switch (keyCode) {
+			 // ABORT GAME
+	        case Keys.BACK: case Keys.ESCAPE:
+	                screen.gameover();
+	                return true;
+		}
+		
+		return value;
 	}
 
 	@Override

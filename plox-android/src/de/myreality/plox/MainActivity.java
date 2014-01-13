@@ -2,6 +2,8 @@ package de.myreality.plox;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -46,16 +48,23 @@ public class MainActivity extends AndroidApplication implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		cfg.useGL20 = true;
 		aHelper.setup(this);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		initialize(new PloxGame(this), cfg);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
@@ -71,7 +80,7 @@ public class MainActivity extends AndroidApplication implements
 				}
 			});
 		} catch (final Exception ex) {
-
+			Log.d("LOGINFAIL", ex.getMessage());
 		}
 	}
 

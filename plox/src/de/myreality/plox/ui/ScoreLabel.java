@@ -14,23 +14,24 @@ import de.myreality.plox.tweens.LabelTween;
 public class ScoreLabel extends Label {
 
 	private TweenManager tweenManager;
-	
+
 	private Scoreable scoreable;
-	
+
 	private int currentPoints;
-    
-    private boolean fadingAllowed;
-    
-    public ScoreLabel(Scoreable scoreable, LabelStyle style) {
-    	this(scoreable, null, style);
-    }
-	
-	public ScoreLabel(Scoreable scoreable, TweenManager tweenManager, LabelStyle style) {
+
+	private boolean fadingAllowed;
+
+	public ScoreLabel(Scoreable scoreable, LabelStyle style) {
+		this(scoreable, null, style);
+	}
+
+	public ScoreLabel(Scoreable scoreable, TweenManager tweenManager,
+			LabelStyle style) {
 		super("", style);
 		this.scoreable = scoreable;
 		this.tweenManager = tweenManager;
 	}
-	
+
 	public void reset() {
 		currentPoints = 0;
 		tweenManager = null;
@@ -38,33 +39,30 @@ public class ScoreLabel extends Label {
 	}
 
 	@Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-            
-            if (currentPoints < scoreable.getScore()) {
-            		System.out.println(currentPoints + "/ " + scoreable.getScore());
-                    if (fadingAllowed && tweenManager != null) {
-                            tweenManager.killTarget(this);
-                            Color c = getColor();
-                            setColor(c.r, c.g, c.b, 1f);
-                            Tween.to(this, LabelTween.ALPHA, 1)
-                             .target(0.5f)
-                            .ease(TweenEquations.easeInOutQuad)
-                            .start(tweenManager);
-                    }
-                    
-                    currentPoints += ((scoreable.getScore() - currentPoints) / 5) + 1;
-                    
-                    if (currentPoints > scoreable.getScore()) {
-                    	currentPoints = scoreable.getScore();
-                    }
+	public void draw(SpriteBatch batch, float parentAlpha) {
 
-                    fadingAllowed = false;
-                    
-            } else {
-                    fadingAllowed = true;
-            }
-            
-            setText("" + currentPoints);
-            super.draw(batch, parentAlpha);
-    }
+		if (currentPoints < scoreable.getScore()) {
+			if (fadingAllowed && tweenManager != null) {
+				tweenManager.killTarget(this);
+				Color c = getColor();
+				setColor(c.r, c.g, c.b, 1f);
+				Tween.to(this, LabelTween.ALPHA, 1).target(0.5f)
+						.ease(TweenEquations.easeInOutQuad).start(tweenManager);
+			}
+
+			currentPoints += ((scoreable.getScore() - currentPoints) / 5) + 1;
+
+			if (currentPoints > scoreable.getScore()) {
+				currentPoints = scoreable.getScore();
+			}
+
+			fadingAllowed = false;
+
+		} else {
+			fadingAllowed = true;
+		}
+
+		setText("" + currentPoints);
+		super.draw(batch, parentAlpha);
+	}
 }
