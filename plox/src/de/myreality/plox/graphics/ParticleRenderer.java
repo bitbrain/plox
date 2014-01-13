@@ -21,16 +21,13 @@ package de.myreality.plox.graphics;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Resources;
-import de.myreality.plox.screens.IngameScreen;
 
 /**
  * Listens to a snake to spawn particles on collisions
@@ -52,17 +49,14 @@ public class ParticleRenderer  implements GameObjectListener{
 	private ParticleManager particleManager;
 	
 	private Map<GameObject, ParticleEffect> effects;
-	
-	private IngameScreen screen;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	
-	public ParticleRenderer(IngameScreen screen) {
+	public ParticleRenderer() {
 		particleManager = new ParticleManager();
 		effects = new HashMap<GameObject, ParticleEffect>();
-		this.screen = screen;
 	}
 
 	// ===========================================================

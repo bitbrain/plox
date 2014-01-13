@@ -31,6 +31,7 @@ import de.myreality.plox.PloxGame;
 import de.myreality.plox.Resources;
 import de.myreality.plox.Scoreable;
 import de.myreality.plox.ai.EnemyController;
+import de.myreality.plox.google.GoogleInterface;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.GameControls;
 import de.myreality.plox.tweens.GameObjectTween;
@@ -211,6 +212,8 @@ public class IngameScreen implements Screen {
 		}
 
 		if (fadeCount >= objects.size() && (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.BACK))) {
+			GoogleInterface google = game.getGoogle();
+			google.submitScore(playerScore.getScore());
 			game.setScreen(new MenuScreen(game));
 		}
 	}
@@ -258,7 +261,7 @@ public class IngameScreen implements Screen {
 		background = new Sprite(Resources.BACKGROUND_INGAME);
 		objectFactory = new GameObjectFactory();
 		collisionHandler = new CollisionHandler();
-		particleRenderer = new ParticleRenderer(this);
+		particleRenderer = new ParticleRenderer();
 		playerScore = new PlayerScore();
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;

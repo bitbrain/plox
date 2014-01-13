@@ -3,8 +3,6 @@
 	<name>plox-android</name>
 	<comment></comment>
 	<projects>
-		<project>BaseGameUtils</project>
-		<project>google-play-services_lib</project>
 		<project>plox</project>
 	</projects>
 	<buildSpec>

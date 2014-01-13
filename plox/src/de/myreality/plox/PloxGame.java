@@ -18,6 +18,7 @@ public class PloxGame extends Game {
 	
 	public PloxGame(GoogleInterface google) {
 		this.google = google;
+		google.login();
 	}
 	
 	public GoogleInterface getGoogle() {

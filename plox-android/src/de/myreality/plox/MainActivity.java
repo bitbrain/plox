@@ -55,9 +55,10 @@ public class MainActivity extends AndroidApplication implements
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
+		aHelper.setup(this);
+		
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
 		cfg.useGL20 = true;
-		aHelper.setup(this);
 		initialize(new PloxGame(this), cfg);
 	}
 
@@ -80,7 +81,7 @@ public class MainActivity extends AndroidApplication implements
 				}
 			});
 		} catch (final Exception ex) {
-			Log.d("LOGINFAIL", ex.getMessage());
+			Log.e("LOGINFAIL", ex.getMessage());
 		}
 	}
 
