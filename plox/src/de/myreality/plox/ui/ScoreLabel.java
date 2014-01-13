@@ -33,25 +33,33 @@ public class ScoreLabel extends Label {
 	
 	public void reset() {
 		currentPoints = 0;
+		tweenManager = null;
+		getColor().a = 1f;
 	}
 
 	@Override
     public void draw(SpriteBatch batch, float parentAlpha) {
             
             if (currentPoints < scoreable.getScore()) {
-                    
+            		System.out.println(currentPoints + "/ " + scoreable.getScore());
                     if (fadingAllowed && tweenManager != null) {
                             tweenManager.killTarget(this);
                             Color c = getColor();
                             setColor(c.r, c.g, c.b, 1f);
-                            Tween.to(this, LabelTween.ALPHA, 3)
+                            Tween.to(this, LabelTween.ALPHA, 1)
                              .target(0.5f)
                             .ease(TweenEquations.easeInOutQuad)
                             .start(tweenManager);
                     }
                     
-                    currentPoints++;
+                    currentPoints += ((scoreable.getScore() - currentPoints) / 5) + 1;
+                    
+                    if (currentPoints > scoreable.getScore()) {
+                    	currentPoints = scoreable.getScore();
+                    }
+
                     fadingAllowed = false;
+                    
             } else {
                     fadingAllowed = true;
             }

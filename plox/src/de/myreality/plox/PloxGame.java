@@ -19,6 +19,10 @@ public class PloxGame extends Game {
 	public PloxGame(GoogleInterface google) {
 		this.google = google;
 	}
+	
+	public GoogleInterface getGoogle() {
+		return google;
+	}
 
 	@Override
 	public void create() {

@@ -8,14 +8,11 @@ import de.myreality.plox.Planet;
 
 public class AlienStrategy implements GameObjectStrategy {
 	
-	private GameObject player;
-	
 	private Planet planet;
 	
 	private float time;
 	
 	public AlienStrategy(GameObject player, Planet planet) {
-		this.player = player;
 		this.planet = planet;
 	}
 

@@ -32,6 +32,7 @@ public class MenuScreen implements Screen {
 	private TweenManager tweenManager;
 	private boolean lastTouched = true;
 	private Stage stage;
+	private boolean connected;
 	
 	public MenuScreen(PloxGame game) {
 		this.game = game;
@@ -41,6 +42,8 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		showGoogleButtons();
 		
 		tweenManager.update(delta);
 		
@@ -75,15 +78,8 @@ public class MenuScreen implements Screen {
 			text.setY(height / 5);
 			stage.addActor(text);
 			animateLabel(text);
+			showGoogleButtons();
 			
-			Image imgWorldlist = new Image(Resources.BUTTON_RANK);			
-			stage.addActor(imgWorldlist);
-			imgWorldlist.setScale(4f);
-            imgWorldlist.setPosition(80, 80);            
-            Image imgAchievements = new Image(Resources.BUTTON_ACHIEVEMENTS);			
-			stage.addActor(imgAchievements);
-			imgAchievements.setScale(4f);
-			imgAchievements.setPosition(Gdx.graphics.getWidth() - 80 - imgAchievements.getWidth() * 4, 80);
 		}
 	}
 
@@ -121,6 +117,21 @@ public class MenuScreen implements Screen {
         })
         .setCallbackTriggers(TweenCallback.COMPLETE)
         .repeatYoyo(1, 0).start(tweenManager);
+	}
+	
+	private void showGoogleButtons() {
+		if (game.getGoogle().isConnected() && !connected) {
+			connected = true;
+			Image imgWorldlist = new Image(Resources.BUTTON_RANK);			
+			stage.addActor(imgWorldlist);
+			imgWorldlist.setScale(4f);
+            imgWorldlist.setPosition(80, 80);            
+            Image imgAchievements = new Image(Resources.BUTTON_ACHIEVEMENTS);			
+			stage.addActor(imgAchievements);
+			imgAchievements.setScale(4f);
+			imgAchievements.setPosition(Gdx.graphics.getWidth() - 80 - imgAchievements.getWidth() * 4, 80);
+	
+		}
 	}
 	
 	private void animateLogo() {

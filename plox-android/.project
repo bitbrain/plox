@@ -3,6 +3,7 @@
 	<name>plox-android</name>
 	<comment></comment>
 	<projects>
+		<project>plox</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

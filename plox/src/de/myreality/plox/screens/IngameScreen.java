@@ -34,8 +34,8 @@ import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.GameControls;
 import de.myreality.plox.tweens.GameObjectTween;
-import de.myreality.plox.tweens.LabelTween;
 import de.myreality.plox.tweens.SpriteTween;
+import de.myreality.plox.ui.PopupManager;
 import de.myreality.plox.ui.ScoreLabel;
 
 public class IngameScreen implements Screen {
@@ -73,6 +73,8 @@ public class IngameScreen implements Screen {
 	private Sprite gameOver;
 
 	private boolean over;
+	
+	private PopupManager popupManager;
 
 	private boolean fadeActivated;
 
@@ -124,7 +126,8 @@ public class IngameScreen implements Screen {
 						.start(tweenManager);
 			}
 			((ScoreLabel)pointLabel).reset();
-			pointLabel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 4);
+			pointLabel.setFontScale(4);
+			pointLabel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
 
 			Tween.to(planet, GameObjectTween.ALPHA, 2f).target(0.3f)
 					.setCallback(new TweenCallback() {
@@ -137,7 +140,7 @@ public class IngameScreen implements Screen {
 			Tween.to(gameOver, SpriteTween.ALPHA, 2f).target(1.0f)
 					.ease(TweenEquations.easeInOutQuad).start(tweenManager);
 			Tween.to(gameOver, SpriteTween.BOUNCE, 2f)
-					.target(Gdx.graphics.getHeight() / 2f
+					.target(Gdx.graphics.getHeight() / 3f
 							- gameOver.getHeight() / 2f)
 					.ease(TweenEquations.easeInOutBounce).start(tweenManager);
 		}
@@ -147,6 +150,8 @@ public class IngameScreen implements Screen {
 		
 		if (!over) {
 			controller.update(delta);
+		} else {
+			pointLabel.setPosition(Gdx.graphics.getWidth() / 2 - pointLabel.getWidth(), Gdx.graphics.getHeight() / 3);
 		}
 
 		camera.update();
@@ -225,6 +230,12 @@ public class IngameScreen implements Screen {
 			controls.addActor(pointLabel);
 			
 			Gdx.input.setInputProcessor(controls);
+			
+
+			LabelStyle style = new LabelStyle();
+			style.font = Resources.BITMAP_FONT_REGULAR;
+			style.fontColor = Color.valueOf("ffffff");
+			popupManager = new PopupManager(controls, tweenManager, style);
 		}
 
 		camera.setToOrtho(true, width, height);
@@ -267,6 +278,7 @@ public class IngameScreen implements Screen {
 
 		planet = objectFactory.createPlanet(Math.round(centerX),
 				Math.round(centerY), tweenManager);
+		
 	}
 
 	public GameObject getPlayer() {
@@ -332,8 +344,10 @@ public class IngameScreen implements Screen {
 					
 					if (b.isDead()) {
 						playerScore.addScore(50);
+						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");
 					} else {
 						playerScore.addScore(10);
+						popupManager.popup(b.getCenterX(), b.getCenterY(), "10");
 					}
 					remove(a);
 					for (GameObjectListener l : a.getListeners()) {

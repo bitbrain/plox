@@ -32,7 +32,6 @@ public class MainActivity extends AndroidApplication implements
 			@Override
 			public void onLeaderboardScoresLoaded(int statusCode,
 					LeaderboardBuffer leaderboard, LeaderboardScoreBuffer scores) {
-				System.out.println("In call back");
 
 				for (int i = 0; i < scores.getCount(); i++) {
 					System.out.println(scores.get(i)
