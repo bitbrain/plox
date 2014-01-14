@@ -27,7 +27,12 @@ public final class Resources {
 	public static final String BACKGROUND = PATH + "background.png";
 	public static final String BACKGROUND_INGAME = PATH + "background-ingame.png";
 	public static final String GAMEOVER = PATH + "gameover.png";
-
+	public static final String POWERUP_HEAL = PATH + "powerup-heal.png";
+	public static final String POWERUP_DAMAGE = PATH + "powerup-damage.png";
+	public static final String POWERUP_SIZE = PATH + "powerup-size.png";
+	public static final String POWERUP_SPEED = PATH + "powerup-speed.png";
+	public static final String POWERUP_PROTECTOR = PATH + "powerup-protector.png";
+	
 	public static final String PARTICLES_BLUE = PATH + "particle-blue";
 	public static final String PARTICLES_SHOT = PATH + "particle-shot";
 	public static final String PARTICLES_EXPLOSION = PATH + "explosion";
@@ -64,7 +69,12 @@ public final class Resources {
 		manager.load(BACKGROUND, Texture.class);
 		manager.load(BACKGROUND_INGAME, Texture.class);
 		manager.load(GAMEOVER, Texture.class);
-
+		manager.load(POWERUP_HEAL, Texture.class);
+		manager.load(POWERUP_DAMAGE, Texture.class);
+		manager.load(POWERUP_SIZE, Texture.class);
+		manager.load(POWERUP_SPEED, Texture.class);
+		manager.load(POWERUP_PROTECTOR, Texture.class);
+		
 		manager.load(PARTICLES_BLUE, ParticleEffect.class);
 		manager.load(PARTICLES_SHOT, ParticleEffect.class);
 		manager.load(PARTICLES_EXPLOSION, ParticleEffect.class);

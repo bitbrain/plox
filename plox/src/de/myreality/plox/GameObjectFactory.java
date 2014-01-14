@@ -30,13 +30,23 @@ public class GameObjectFactory {
 	}
 	
 	public GameObject createPowerUp(float x, float y, PowerUpStrategy strategy) {
-		return new PowerUp(x, y, strategy);
+		
+		int size = Gdx.graphics.getWidth() / 20;
+		
+		x -= size / 2f;
+		y -= size / 2f;
+		
+		return new PowerUp(x, y, size, strategy);
 	}
 	
-	public GameObject createShot(float x, float y, float targetX, float targetY, float speed, int size, int damage) {	
+	public GameObject createShot(float x, float y, int targetX, int targetY, int speed, int size, int damage) {	
+		return createShot(x, y, size, damage, new DirectionStrategy(x, y, targetX, targetY, speed));
+	}
+	
+	public GameObject createShot(float x, float y, int size, int damage, GameObjectStrategy strategy) {	
 		
 		GameObject object = new Shot(x, y, size, size, damage);		
-		object.addStrategy(new DirectionStrategy(x, y, targetX, targetY, speed));
+		object.addStrategy(strategy);
 		
 		// Sound effect here!
 		Sound s = Resources.get(Resources.SOUND_SHOT, Sound.class);

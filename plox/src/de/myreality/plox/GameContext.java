@@ -1,6 +1,7 @@
 package de.myreality.plox;
 
 import de.myreality.plox.graphics.ParticleRenderer;
+import de.myreality.plox.ui.PopupManager;
 
 
 public interface GameContext {
@@ -16,4 +17,6 @@ public interface GameContext {
 	void remove(GameObject object);
 	
 	ParticleRenderer getParticleRenderer();
+
+	PopupManager getPopupManager();
 }

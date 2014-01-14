@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -69,6 +70,13 @@ public class ParticleManager {
 		ParticleEffect copy = new ParticleEffect(original);		
 		effects.put(copy, endless);
 		return copy;
+	}
+	
+	public void setColor(ParticleEffect effect, float[] colors, float[] timeline) {
+		for (ParticleEmitter emitter : effect.getEmitters()) {
+			emitter.getTint().setTimeline(timeline);
+			emitter.getTint().setColors(colors);
+		}
 	}
 	
 	public void render(SpriteBatch batch, float delta) {

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
@@ -116,7 +117,7 @@ public class ParticleRenderer  implements GameObjectListener{
 		ParticleEffect effect = effects.get(object);
 		
 		if (effect != null) {		
-			if (object.getType().equals(GameObjectType.ALIEN)) {
+			if (object.getType().equals(GameObjectType.ALIEN)) {				
 				effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
 			} else {
 				effect.setPosition(object.getCenterX(), object.getCenterY());
@@ -135,14 +136,14 @@ public class ParticleRenderer  implements GameObjectListener{
 		
 		if (object.getType().equals(GameObjectType.PLAYER)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
-			ParticleEffect effect = particleManager.create(eff, true);			
+			ParticleEffect effect = particleManager.create(eff, true);
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
 		}
 		
 		if (object.getType().equals(GameObjectType.SHOT)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
-			ParticleEffect effect = particleManager.create(eff, true);	
+			ParticleEffect effect = particleManager.create(eff, true);				
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
 		}

@@ -39,6 +39,7 @@ import de.myreality.plox.Resources;
 import de.myreality.plox.Scoreable;
 import de.myreality.plox.Shot;
 import de.myreality.plox.ai.EnemyController;
+import de.myreality.plox.ai.RotationStrategy;
 import de.myreality.plox.google.GoogleInterface;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.IngameControls;
@@ -208,6 +209,7 @@ public class IngameScreen implements Screen, GameContext {
 				// Spawn powerups here
 				for (PowerUpStrategy s : o.getPowerUps()) {
 					GameObject powerUp = objectFactory.createPowerUp(o.getCenterX(), o.getCenterY(), s);
+					powerUp.addStrategy(new RotationStrategy());
 					add(powerUp);
 				}
 			}
@@ -231,6 +233,11 @@ public class IngameScreen implements Screen, GameContext {
 			google.submitScore(playerScore.getScore());
 			game.setScreen(new MenuScreen(game));
 		}
+	}
+	
+	@Override
+	public PopupManager getPopupManager() {
+		return popupManager;
 	}
 
 	@Override
@@ -415,6 +422,8 @@ public class IngameScreen implements Screen, GameContext {
 				if (powerUp.isUseable()) {
 					b.addPowerUp(powerUp.getStrategy());
 				}
+				
+				remove(powerUp);
 			}
 
 			if (a.getType().equals(GameObjectType.ALIEN)

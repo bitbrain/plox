@@ -11,6 +11,11 @@ import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.Resources;
+import de.myreality.plox.powerups.HealPowerUp;
+import de.myreality.plox.powerups.ProtectorPowerUp;
+import de.myreality.plox.powerups.ShootDamagePowerUp;
+import de.myreality.plox.powerups.ShootSizePowerUp;
+import de.myreality.plox.powerups.ShootSpeedPowerUp;
 import de.myreality.plox.screens.IngameScreen;
 import de.myreality.plox.tweens.GameObjectTween;
 import de.myreality.plox.util.Timer;
@@ -38,7 +43,7 @@ public class EnemyController {
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score / INTERVAL) / 2;
+		currentInterval = INTERVAL - (score / INTERVAL);
 		
 		if (currentInterval < 500) {
 			currentInterval = 500;
@@ -49,7 +54,9 @@ public class EnemyController {
 			int amount = 1;
 			
 			if (Math.random() < 0.05) {
-				amount = 3;
+				amount = (int) (Math.random() * 5 + 1);
+			} else if (Math.random() < 0.1) {
+				amount = (int) (Math.random() * 2 + 1);
 			}
 			
 			spawnAlien(amount);
@@ -106,6 +113,17 @@ public class EnemyController {
 			alien.setMaxLife(score / 100 + 50);
 		}
 		
+		if (Math.random() < 0.1) {
+			alien.addPowerUp(new ShootSizePowerUp(5));
+		} else if (Math.random() < 0.08) {
+			alien.addPowerUp(new ShootDamagePowerUp(10));
+		} else if (Math.random() < 0.1) {
+			alien.addPowerUp(new ShootSpeedPowerUp(1));
+		} else if (Math.random() < 0.05) {
+			alien.addPowerUp(new HealPowerUp(25));
+		} else if (Math.random() < 1) {
+			alien.addPowerUp(new ProtectorPowerUp(200));
+		}
 	}
 	
 	private class EnemyShaker implements GameObjectListener {

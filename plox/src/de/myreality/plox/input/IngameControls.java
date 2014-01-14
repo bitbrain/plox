@@ -133,7 +133,7 @@ public class IngameControls extends Stage implements InputProcessor {
 				GameObject shot = f.createShot(
 						(int)(p.getX() + p.getWidth() / 2f),
 						(int)(p.getY() + p.getHeight() / 2f), 
-						screenX, screenY, 1600f, 
+						screenX, screenY, 1600, 
 						player.getShootSize(),
 						player.getShootDamage());
 				screen.add(shot);
