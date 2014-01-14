@@ -29,10 +29,12 @@ import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Planet;
+import de.myreality.plox.Player;
 import de.myreality.plox.PlayerScore;
 import de.myreality.plox.PloxGame;
 import de.myreality.plox.Resources;
 import de.myreality.plox.Scoreable;
+import de.myreality.plox.Shot;
 import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.google.GoogleInterface;
 import de.myreality.plox.graphics.ParticleRenderer;
@@ -295,8 +297,8 @@ public class IngameScreen implements Screen {
 		
 	}
 
-	public GameObject getPlayer() {
-		return player;
+	public Player getPlayer() {
+		return (Player) player;
 	}
 	
 	public Scoreable getPlayerScore() {
@@ -359,7 +361,9 @@ public class IngameScreen implements Screen {
 
 				if (!b.getType().equals(GameObjectType.PLAYER)) {
 					
-					b.damage(40);
+					Shot shot = (Shot)a;
+					
+					b.damage(shot.getDamage());
 					
 					Sound sound = Resources.get(Resources.SOUND_IMPACT, Sound.class);
 					sound.play(0.4f, (float)(1.0f + Math.random() * 0.4), (float)(1.0f + Math.random() * 0.4));
@@ -367,7 +371,7 @@ public class IngameScreen implements Screen {
 					if (b.isDead()) {		
 						sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 						sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
-						playerScore.addScore(50);
+						playerScore.addScore(b.getMaxLife());
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");
 					} else {
 						playerScore.addScore(10);

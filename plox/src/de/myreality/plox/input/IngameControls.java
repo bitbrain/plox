@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
+import de.myreality.plox.Player;
 import de.myreality.plox.screens.IngameScreen;
 import de.myreality.plox.util.Timer;
 
@@ -107,14 +108,12 @@ public class IngameControls extends Stage implements InputProcessor {
 			player.setY(player.getY() + vec.y * speed);
 		} else if (!screen.isOver() && Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
 			
-			// Shooting
-			final int INTERVAL = 400;
+			Player player = screen.getPlayer();
+			
 			boolean shoot = false;
 			
-			int score = screen.getPlayerScore().getScore();
 			
-			
-			int currentInterval = INTERVAL - (score / 2000) / 2;
+			int currentInterval = (int) (5000 / player.getShootSpeed());
 			
 			if (timer != null && timer.isRunning()) {
 				if (timer.getTicks() > currentInterval) {
@@ -134,7 +133,9 @@ public class IngameControls extends Stage implements InputProcessor {
 				GameObject shot = f.createShot(
 						(int)(p.getX() + p.getWidth() / 2f),
 						(int)(p.getY() + p.getHeight() / 2f), 
-						screenX, screenY, 1600f);
+						screenX, screenY, 1600f, 
+						player.getShootSize(),
+						player.getShootDamage());
 				screen.add(shot);
 			}
 		}

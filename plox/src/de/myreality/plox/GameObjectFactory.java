@@ -24,16 +24,14 @@ public class GameObjectFactory {
 	public GameObject createPlayer(int x, int y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.get(Resources.PLAYER, Texture.class), GameObjectType.PLAYER);
+		GameObject object = new Player(x, y, size);
 		object.addStrategy(new RotationStrategy());
 		return object;
 	}
 	
-	public GameObject createShot(int x, int y, int targetX, int targetY, float speed) {	
+	public GameObject createShot(int x, int y, int targetX, int targetY, float speed, int size, int damage) {	
 		
-		int size = Gdx.graphics.getHeight() / 20;
-		
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.get(Resources.SHOT, Texture.class), GameObjectType.SHOT);		
+		GameObject object = new Shot(x, y, size, size, damage);		
 		object.addStrategy(new DirectionStrategy(x, y, targetX, targetY, speed));
 		
 		// Sound effect here!
