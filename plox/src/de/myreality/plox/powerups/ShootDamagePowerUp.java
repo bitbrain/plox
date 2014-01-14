@@ -45,4 +45,13 @@ public class ShootDamagePowerUp implements PowerUpStrategy {
 		return false;
 	}
 
+	@Override
+	public float[] getColors() {
+		return new float[]{
+				1f, 0.5f, 0f,
+				1f, 0.2f, 0f,
+				1f, 0.1f, 0f
+		};
+	}
+
 }

@@ -26,7 +26,7 @@ public class ShootSpeedPowerUp implements PowerUpStrategy {
 		
 		LabelStyle style = new LabelStyle();
 		style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
-		style.fontColor = new Color(0.5f, 0.2f, 0.6f, 1f);
+		style.fontColor = new Color(0.8f, 0.0f, 0.5f, 1f);
 		popupManager.popup(powerup.getCenterX(), powerup.getCenterY(), "+" + speedBoni + " Shoot Speed", style);
 	}
 
@@ -43,6 +43,15 @@ public class ShootSpeedPowerUp implements PowerUpStrategy {
 	@Override
 	public boolean isUseable() {
 		return false;
+	}
+
+	@Override
+	public float[] getColors() {
+		return new float[]{
+				1f, 0.0f, 1.0f,
+				1f, 0.0f, 0.7f,
+				1f, 0.0f, 0.7f
+		};
 	}
 
 }

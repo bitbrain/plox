@@ -46,4 +46,10 @@ public class ShootSizePowerUp implements PowerUpStrategy {
 		return false;
 	}
 
+	@Override
+	public float[] getColors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

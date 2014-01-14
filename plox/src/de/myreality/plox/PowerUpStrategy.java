@@ -10,4 +10,6 @@ public interface PowerUpStrategy {
 	String getTextureID();
 	
 	boolean isUseable();
+	
+	float[] getColors();
 }

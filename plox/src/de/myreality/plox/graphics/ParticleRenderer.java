@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.GameObjectType;
+import de.myreality.plox.PowerUp;
 import de.myreality.plox.Resources;
 import de.myreality.plox.screens.ScreenUtils;
 
@@ -72,7 +72,6 @@ public class ParticleRenderer  implements GameObjectListener{
 	// ===========================================================
 	// World methods
 	// ===========================================================
-
 	
 	public void render(SpriteBatch batch, float delta) {
 		particleManager.render(batch, delta);
@@ -90,7 +89,9 @@ public class ParticleRenderer  implements GameObjectListener{
 			particleManager.setEndless(effect, false);
 			effect.setDuration(0);
 			
-			if (!object.getType().equals(GameObjectType.SHOT)) {
+			if (object.getType().equals(GameObjectType.POWERUP)) {
+				particleManager.unload(effect);
+			} else if (!object.getType().equals(GameObjectType.SHOT)) {
 				ParticleEffect eff = Resources.get(Resources.PARTICLES_EXPLOSION, ParticleEffect.class);
 				particleManager.unload(effect);
 				effect = particleManager.create(eff, false);
@@ -132,20 +133,36 @@ public class ParticleRenderer  implements GameObjectListener{
 			ParticleEffect effect = particleManager.create(eff, true);			
 			effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
 			effects.put(object, effect);
-		}
+		} else
 		
 		if (object.getType().equals(GameObjectType.PLAYER)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
-		}
+		} else
 		
 		if (object.getType().equals(GameObjectType.SHOT)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);				
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
+		} else
+		
+		if (object.getType().equals(GameObjectType.POWERUP)) {
+			ParticleEffect eff = Resources.get(Resources.PARTICLES_POWERUP, ParticleEffect.class);
+			ParticleEffect effect = particleManager.create(eff, true);				
+			effect.setPosition(object.getCenterX(), object.getCenterY());
+			
+			effects.put(object, effect);	
+			
+			// Change particle color
+			PowerUp up = (PowerUp)object;
+			float[] colors = up.getStrategy().getColors();
+			float[] timeline = new float[]{0.0f, 0.4f, 0.8f};
+			if (colors != null) {
+				particleManager.setColor(effect, colors, timeline);
+			}
 		}
 	}
 

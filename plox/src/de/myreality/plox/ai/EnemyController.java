@@ -121,7 +121,7 @@ public class EnemyController {
 			alien.addPowerUp(new ShootSpeedPowerUp(1));
 		} else if (Math.random() < 0.05) {
 			alien.addPowerUp(new HealPowerUp(25));
-		} else if (Math.random() < 1) {
+		} else if (Math.random() < 0.01) {
 			alien.addPowerUp(new ProtectorPowerUp(200));
 		}
 	}

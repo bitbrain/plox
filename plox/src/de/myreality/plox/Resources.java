@@ -37,7 +37,8 @@ public final class Resources {
 	public static final String PARTICLES_SHOT = PATH + "particle-shot";
 	public static final String PARTICLES_EXPLOSION = PATH + "explosion";
 	public static final String PARTICLES_EXPLOSION_SMALL = PATH + "explosion-small";
-
+	public static final String PARTICLES_POWERUP = PATH + "powerup";
+	
 	public static final String BITMAP_FONT_REGULAR = PATH + "medium.fnt";
 
 	public static final String MUSIC_THEME = PATH + "plox.mp3";
@@ -45,7 +46,8 @@ public final class Resources {
 	public static final String SOUND_SHOT = PATH + "shot.mp3";
 	public static final String SOUND_IMPACT = PATH + "impact.mp3";
 	public static final String SOUND_EXPLODE = PATH + "explode.mp3";
-
+	public static final String SOUND_POWERUP = PATH + "powerup.mp3";
+	
 	public static <T> T get(String id, Class<T> clazz) {
 		manager.finishLoading();
 		return manager.get(id, clazz);
@@ -79,7 +81,8 @@ public final class Resources {
 		manager.load(PARTICLES_SHOT, ParticleEffect.class);
 		manager.load(PARTICLES_EXPLOSION, ParticleEffect.class);
 		manager.load(PARTICLES_EXPLOSION_SMALL, ParticleEffect.class);
-
+		manager.load(PARTICLES_POWERUP, ParticleEffect.class);
+		
 		manager.load(MUSIC_THEME, Music.class);
 		
 		manager.load(BITMAP_FONT_REGULAR, BitmapFont.class);
@@ -87,6 +90,7 @@ public final class Resources {
 		manager.load(SOUND_SHOT, Sound.class);
 		manager.load(SOUND_IMPACT, Sound.class);
 		manager.load(SOUND_EXPLODE, Sound.class);
+		manager.load(SOUND_POWERUP, Sound.class);
 	}
 
 	public static void dispose() {

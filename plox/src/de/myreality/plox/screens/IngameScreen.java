@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -193,17 +194,9 @@ public class IngameScreen implements Screen, GameContext {
 				o.draw(batch);
 			} else {
 				remove(o);
-				
-				for (GameObjectListener l : o.getListeners()) {
-					l.onRemove(o);
-				}
 			}
 
 			if (o.getCurrentLife() < 1 && !fadeActivated) {
-
-				for (GameObjectListener l : o.getListeners()) {
-					l.onRemove(o);
-				}
 
 				remove(o);
 				// Spawn powerups here
@@ -366,6 +359,9 @@ public class IngameScreen implements Screen, GameContext {
 	@Override
 	public void remove(GameObject object) {
 		objects.remove(object);
+		for (GameObjectListener l : object.getListeners()) {
+			l.onRemove(object);
+		}
 	}
 	
 	@Override
@@ -410,14 +406,13 @@ public class IngameScreen implements Screen, GameContext {
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "10");
 					}
 					remove(a);
-					for (GameObjectListener l : a.getListeners()) {
-						l.onRemove(a);
-					}
 				}
 			} else if (a.getType().equals(GameObjectType.POWERUP)
 					&& b.getType().equals(GameObjectType.PLAYER)) {
 				PowerUp powerUp = (PowerUp)a;
 				powerUp.onCollect(context);
+				Sound sound = Resources.get(Resources.SOUND_POWERUP, Sound.class);
+				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(0.5f + Math.random() * 0.4));
 				
 				if (powerUp.isUseable()) {
 					b.addPowerUp(powerUp.getStrategy());
@@ -431,9 +426,6 @@ public class IngameScreen implements Screen, GameContext {
 				remove(a);
 				Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
-				for (GameObjectListener l : a.getListeners()) {
-					l.onRemove(a);
-				}
 				b.damage(50);
 				
 				tweenManager.killTarget(b);
