@@ -29,7 +29,7 @@ public class GameControls extends Stage implements InputProcessor {
 			SpriteBatch batch, IngameScreen screen) {
 		super(width, height, keepAspectRatio, batch);
 		this.screen = screen;		
-		 Gdx.input.setCatchBackKey(true);
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	/**
@@ -40,6 +40,7 @@ public class GameControls extends Stage implements InputProcessor {
 	public GameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen) {
 		super(width, height, keepAspectRatio);
 		this.screen = screen;
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	/**
@@ -49,6 +50,7 @@ public class GameControls extends Stage implements InputProcessor {
 	public GameControls(float width, float height, IngameScreen screen) {
 		super(width, height);
 		this.screen = screen;
+		Gdx.input.setCatchBackKey(true);
 	}
 	
 	
@@ -66,10 +68,11 @@ public class GameControls extends Stage implements InputProcessor {
 		
 		return value;
 	}
+	
+	
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-
 		super.touchDragged(screenX, screenY, pointer);	
 		
 		if (!screen.isOver() && pointer == 0 && !Gdx.app.getType().equals(ApplicationType.Desktop)) {

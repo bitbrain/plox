@@ -9,9 +9,10 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -80,7 +81,7 @@ public class MenuScreen implements Screen {
 			stage = new Stage();
 
 			LabelStyle style = new LabelStyle();
-			style.font = Resources.BITMAP_FONT_REGULAR;
+			style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			style.fontColor = Color.WHITE;
 			Label text = new Label("Touch to start", style);
 			text.setX(width / 2 - text.getWidth() / 2);
@@ -96,8 +97,8 @@ public class MenuScreen implements Screen {
 	public void show() {
 		Gdx.input.setCatchBackKey(true);
 		tweenManager = new TweenManager();
-		background = new Sprite(Resources.BACKGROUND);
-		logo = new Sprite(Resources.LOGO);
+		background = new Sprite(Resources.get(Resources.BACKGROUND, Texture.class));
+		logo = new Sprite(Resources.get(Resources.LOGO, Texture.class));
 		logoWidth = logo.getWidth();
 		logoHeight = logo.getHeight();
 		batch = new SpriteBatch();
@@ -129,11 +130,11 @@ public class MenuScreen implements Screen {
 	private void showGoogleButtons() {
 		if (game.getGoogle().isConnected() && !connected) {
 			connected = true;
-			Image imgWorldlist = new Image(Resources.BUTTON_RANK);
+			Image imgWorldlist = new Image(Resources.get(Resources.BUTTON_RANK, Texture.class));
 			stage.addActor(imgWorldlist);
 			imgWorldlist.setScale(4f);
 			imgWorldlist.setPosition(80, 80);
-			Image imgAchievements = new Image(Resources.BUTTON_ACHIEVEMENTS);
+			Image imgAchievements = new Image(Resources.get(Resources.BUTTON_ACHIEVEMENTS, Texture.class));
 			stage.addActor(imgAchievements);
 			imgAchievements.setScale(4f);
 			imgAchievements.setPosition(Gdx.graphics.getWidth() - 80

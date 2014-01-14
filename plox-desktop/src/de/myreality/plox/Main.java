@@ -10,8 +10,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Plox v. 1.0";
 		cfg.useGL20 = true;
-		cfg.width = 1920;
-		cfg.height = 1080;
+		cfg.width = 1280;
+		cfg.height = 800;
 		
 		new LwjglApplication(new PloxGame(new DesktopInterface()), cfg);
 	}

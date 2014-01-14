@@ -5,6 +5,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
@@ -96,7 +97,7 @@ public class EnemyController {
 		if (typeFactor > 0.2) {
 			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * Math.random())));
 		} else {
-			alien.setTexture(Resources.ALIEN2);
+			alien.setTexture(Resources.get(Resources.ALIEN2, Texture.class));
 			int size = Gdx.graphics.getHeight() / 8;
 			alien.setWidth(size);
 			alien.setHeight(size);

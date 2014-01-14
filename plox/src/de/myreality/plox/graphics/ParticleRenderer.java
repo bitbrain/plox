@@ -28,6 +28,7 @@ import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.GameObjectType;
 import de.myreality.plox.Resources;
+import de.myreality.plox.screens.ScreenUtils;
 
 /**
  * Listens to a snake to spawn particles on collisions
@@ -89,11 +90,14 @@ public class ParticleRenderer  implements GameObjectListener{
 			effect.setDuration(0);
 			
 			if (!object.getType().equals(GameObjectType.SHOT)) {
-				effect = particleManager.create(Resources.PARTICLES_EXPLOSION, false);
+				ParticleEffect eff = Resources.get(Resources.PARTICLES_EXPLOSION, ParticleEffect.class);
+				particleManager.unload(effect);
+				effect = particleManager.create(eff, false);
 				effect.setPosition(object.getCenterX(), object.getCenterY());
 				effect.start();
-			} else {
-				effect = particleManager.create(Resources.PARTICLES_EXPLOSION_SMALL, false);
+			} else if (!ScreenUtils.isOutOfScreen(object)){
+				ParticleEffect eff = Resources.get(Resources.PARTICLES_EXPLOSION_SMALL, ParticleEffect.class);
+				effect = particleManager.create(eff, false);
 				effect.setPosition(object.getCenterX(), object.getCenterY());
 				particleManager.setEndless(effect, false);
 				effect.start();
@@ -123,12 +127,14 @@ public class ParticleRenderer  implements GameObjectListener{
 	@Override
 	public void onAdd(GameObject object) {
 		if (object.getType().equals(GameObjectType.ALIEN)) {
-			ParticleEffect effect = particleManager.create(Resources.PARTICLES_BLUE, true);			
+			ParticleEffect eff = Resources.get(Resources.PARTICLES_BLUE, ParticleEffect.class);
+			ParticleEffect effect = particleManager.create(eff, true);			
 			effects.put(object, effect);
 		}
 		
 		if ( object.getType().equals(GameObjectType.SHOT)) {
-			ParticleEffect effect = particleManager.create(Resources.PARTICLES_SHOT, true);			
+			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
+			ParticleEffect effect = particleManager.create(eff, true);			
 			effects.put(object, effect);
 		}
 	}

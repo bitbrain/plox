@@ -17,6 +17,12 @@ public class Planet extends GameObject {
 	
 	private TweenManager manager;
 	
+	private Texture broken;
+
+	private Texture destroyed;
+
+	private Texture heal;
+	
 	/**
 	 * @param y
 	 * @param x
@@ -29,6 +35,9 @@ public class Planet extends GameObject {
 		super(x, y, 300, size, size, texture, GameObjectType.PLANET);
 		this.state = PlanetState.HEAL;
 		this.manager = manager;
+		this.broken = Resources.get(Resources.PLANET_BROKEN, Texture.class);
+		this.destroyed = Resources.get(Resources.PLANET_DESTROYED, Texture.class);
+		this.heal = Resources.get(Resources.PLANET_HEAL, Texture.class);
 	}
 
 	public PlanetState getState() {
@@ -65,13 +74,13 @@ public class Planet extends GameObject {
 		
 		switch (state) {
 			case BROKEN:
-				setTexture(Resources.PLANET_BROKEN);
+				setTexture(broken);
 				break;
 			case DESTROYED:
-				setTexture(Resources.PLANET_DESTROYED);
+				setTexture(destroyed);
 				break;
 			case HEAL:
-				setTexture(Resources.PLANET_HEAL);
+				setTexture(heal);
 				break;
 			default:
 				break;		

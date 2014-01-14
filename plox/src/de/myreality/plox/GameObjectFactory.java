@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 
 import de.myreality.plox.ai.DirectionStrategy;
 import de.myreality.plox.ai.RotationStrategy;
@@ -15,7 +16,7 @@ public class GameObjectFactory {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.ALIEN, GameObjectType.ALIEN);		
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.get(Resources.ALIEN, Texture.class), GameObjectType.ALIEN);		
 
 		return object;
 	}
@@ -23,7 +24,7 @@ public class GameObjectFactory {
 	public GameObject createPlayer(int x, int y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.PLAYER, GameObjectType.PLAYER);
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.get(Resources.PLAYER, Texture.class), GameObjectType.PLAYER);
 		object.addStrategy(new RotationStrategy());
 		return object;
 	}
@@ -32,11 +33,11 @@ public class GameObjectFactory {
 		
 		int size = Gdx.graphics.getHeight() / 20;
 		
-		GameObject object = new GameObject(x, y, 100, size, size, Resources.SHOT, GameObjectType.SHOT);		
+		GameObject object = new GameObject(x, y, 100, size, size, Resources.get(Resources.SHOT, Texture.class), GameObjectType.SHOT);		
 		object.addStrategy(new DirectionStrategy(x, y, targetX, targetY, speed));
 		
 		// Sound effect here!
-		Sound s = Resources.SOUND_SHOT;
+		Sound s = Resources.get(Resources.SOUND_SHOT, Sound.class);
 		long id = s.play(0.2f);
 		s.setPan(id, (float) (1.0f + Math.random()), 0.2f);
 		s.setPitch(id, (float) (1.2f + Math.random() * 0.4f));
@@ -51,6 +52,6 @@ public class GameObjectFactory {
 		x -= size / 2f;
 		y -= size / 2f;
 		
-		return new Planet(x, y, size, Resources.PLANET_HEAL, manager);
+		return new Planet(x, y, size, Resources.get(Resources.PLANET_HEAL, Texture.class), manager);
 	}
 }

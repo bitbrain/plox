@@ -15,8 +15,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -89,7 +91,8 @@ public class IngameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.141176471f, 0.188235294f, 0.278431373f, 1f);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
+
 		
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 			gameover();
@@ -180,13 +183,14 @@ public class IngameScreen implements Screen {
 				}
 			}
 
-			if (o.getX() + o.getWidth() > 0
-					&& o.getX() < Gdx.graphics.getWidth()
-					&& o.getY() + o.getHeight() > 0
-					&& o.getY() < Gdx.graphics.getHeight()) {
+			if (!ScreenUtils.isOutOfScreen(o)) {
 				o.draw(batch);
 			} else {
 				remove(o);
+				
+				for (GameObjectListener l : o.getListeners()) {
+					l.onRemove(o);
+				}
 			}
 
 			if (o.getCurrentLife() < 1 && !fadeActivated) {
@@ -227,7 +231,7 @@ public class IngameScreen implements Screen {
 			controls = new GameControls(width, height, this);
 			
 			LabelStyle labelStyle = new LabelStyle();
-			labelStyle.font = Resources.BITMAP_FONT_REGULAR;
+			labelStyle.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			labelStyle.fontColor = new Color(1f, 1f, 1f, 1f);
 			pointLabel = new ScoreLabel(playerScore, tweenManager, labelStyle);
 			pointLabel.setPosition(80, Gdx.graphics.getHeight() - pointLabel.getHeight() - 80);
@@ -238,7 +242,7 @@ public class IngameScreen implements Screen {
 			
 
 			LabelStyle style = new LabelStyle();
-			style.font = Resources.BITMAP_FONT_REGULAR;
+			style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			style.fontColor = Color.valueOf("ffffff");
 			popupManager = new PopupManager(controls, tweenManager, style);
 		}
@@ -259,14 +263,15 @@ public class IngameScreen implements Screen {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		controller = new EnemyController(this, tweenManager);
-		background = new Sprite(Resources.BACKGROUND_INGAME);
+		Resources.getManager().finishLoading();
+		background = new Sprite(Resources.get(Resources.BACKGROUND_INGAME, Texture.class));
 		objectFactory = new GameObjectFactory();
 		collisionHandler = new CollisionHandler();
 		particleRenderer = new ParticleRenderer();
 		playerScore = new PlayerScore();
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
-		gameOver = new Sprite(Resources.GAMEOVER);
+		gameOver = new Sprite(Resources.get(Resources.GAMEOVER, Texture.class));
 		gameOver.flip(false, true);
 		float scaleFactor = Gdx.graphics.getWidth() / 800f;
 		gameOver.setBounds(0, 0, gameOver.getWidth() * scaleFactor,
@@ -352,11 +357,11 @@ public class IngameScreen implements Screen {
 					
 					b.damage(40);
 					
-					Sound sound = Resources.SOUND_IMPACT;
+					Sound sound = Resources.get(Resources.SOUND_IMPACT, Sound.class);
 					sound.play(0.4f, (float)(1.0f + Math.random() * 0.4), (float)(1.0f + Math.random() * 0.4));
 					
 					if (b.isDead()) {		
-						sound = Resources.SOUND_EXPLODE;
+						sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 						sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 						playerScore.addScore(50);
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");
@@ -374,7 +379,7 @@ public class IngameScreen implements Screen {
 			if (a.getType().equals(GameObjectType.ALIEN)
 					&& b.getType().equals(GameObjectType.PLAYER)) {
 				remove(a);
-				Sound sound = Resources.SOUND_EXPLODE;
+				Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 				for (GameObjectListener l : a.getListeners()) {
 					l.onRemove(a);

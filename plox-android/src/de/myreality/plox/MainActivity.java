@@ -58,6 +58,7 @@ public class MainActivity extends AndroidApplication implements
 		aHelper.setup(this);
 		
 		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
+		cfg.numSamples = 2;
 		cfg.useGL20 = true;
 		initialize(new PloxGame(this), cfg);
 	}

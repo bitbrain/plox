@@ -28,7 +28,7 @@ public class TargetStrategy implements GameObjectStrategy {
 		if (vec.len() < 10) {
 			target.damage(50);
 			source.kill();
-			Sound sound = Resources.SOUND_EXPLODE;
+			Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 			sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 		}
 		

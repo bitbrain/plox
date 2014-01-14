@@ -72,6 +72,7 @@ public class ParticleManager {
 	}
 	
 	public void render(SpriteBatch batch, float delta) {
+		
 		for (Entry<ParticleEffect, Boolean> entries : effects.entrySet()) {
 			
 			if (!entries.getValue() && entries.getKey().isComplete()) {
@@ -81,6 +82,10 @@ public class ParticleManager {
 				entries.getKey().draw(batch, delta);
 			}
 		}
+	}
+	
+	public void unload(ParticleEffect effect) {
+		effects.remove(effect);
 	}
 	
 	public void setEndless(ParticleEffect effect, boolean endless) {
