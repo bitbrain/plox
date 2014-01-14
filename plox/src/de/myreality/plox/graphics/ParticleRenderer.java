@@ -118,9 +118,9 @@ public class ParticleRenderer  implements GameObjectListener{
 		if (effect != null) {		
 			if (object.getType().equals(GameObjectType.ALIEN)) {
 				effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
-			} else if (object.getType().equals(GameObjectType.SHOT)) {
+			} else {
 				effect.setPosition(object.getCenterX(), object.getCenterY());
-			}
+			} 
 		}
 	}
 
@@ -129,12 +129,21 @@ public class ParticleRenderer  implements GameObjectListener{
 		if (object.getType().equals(GameObjectType.ALIEN)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_BLUE, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);			
+			effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
 			effects.put(object, effect);
 		}
 		
-		if ( object.getType().equals(GameObjectType.SHOT)) {
+		if (object.getType().equals(GameObjectType.PLAYER)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);			
+			effect.setPosition(object.getCenterX(), object.getCenterY());
+			effects.put(object, effect);
+		}
+		
+		if (object.getType().equals(GameObjectType.SHOT)) {
+			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
+			ParticleEffect effect = particleManager.create(eff, true);	
+			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
 		}
 	}

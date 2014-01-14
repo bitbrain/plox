@@ -78,10 +78,6 @@ public final class Resources {
 		manager.load(SOUND_IMPACT, Sound.class);
 		manager.load(SOUND_EXPLODE, Sound.class);
 	}
-	
-	public static AssetManager getManager() {
-		return manager;
-	}
 
 	public static void dispose() {
 		manager.dispose();

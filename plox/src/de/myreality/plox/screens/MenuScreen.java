@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import de.myreality.plox.PloxGame;
 import de.myreality.plox.Resources;
+import de.myreality.plox.input.MenuControls;
 import de.myreality.plox.tweens.SpriteTween;
 
 public class MenuScreen implements Screen {
@@ -56,21 +57,10 @@ public class MenuScreen implements Screen {
 		background.setBounds(0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		background.draw(batch);
-
 		logo.draw(batch);
 		batch.end();
 
 		stage.draw();
-
-		if (!lastTouched && Gdx.input.isTouched()) {
-			game.setScreen(new IngameScreen(game));
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.BACK)) {
-			Gdx.app.exit();
-		}
-
-		lastTouched = Gdx.input.isTouched();
 	}
 
 	@Override
@@ -78,8 +68,7 @@ public class MenuScreen implements Screen {
 		if (stage != null) {
 			stage.setViewport(width, height);
 		} else {
-			stage = new Stage();
-
+			stage = new MenuControls(width, height, false, game);
 			LabelStyle style = new LabelStyle();
 			style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			style.fontColor = Color.WHITE;
@@ -89,13 +78,12 @@ public class MenuScreen implements Screen {
 			stage.addActor(text);
 			animateLabel(text);
 			showGoogleButtons();
-
+			Gdx.input.setInputProcessor(stage);
 		}
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setCatchBackKey(true);
 		tweenManager = new TweenManager();
 		background = new Sprite(Resources.get(Resources.BACKGROUND, Texture.class));
 		logo = new Sprite(Resources.get(Resources.LOGO, Texture.class));

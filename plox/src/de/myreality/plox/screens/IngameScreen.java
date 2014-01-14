@@ -36,7 +36,7 @@ import de.myreality.plox.Scoreable;
 import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.google.GoogleInterface;
 import de.myreality.plox.graphics.ParticleRenderer;
-import de.myreality.plox.input.GameControls;
+import de.myreality.plox.input.IngameControls;
 import de.myreality.plox.tweens.GameObjectTween;
 import de.myreality.plox.tweens.SpriteTween;
 import de.myreality.plox.ui.PopupManager;
@@ -46,7 +46,7 @@ public class IngameScreen implements Screen {
 
 	private Planet planet;
 
-	private GameControls controls;
+	private IngameControls controls;
 
 	private OrthographicCamera camera;
 
@@ -228,7 +228,7 @@ public class IngameScreen implements Screen {
 		if (controls != null) {
 			controls.setViewport(width, height);
 		} else {
-			controls = new GameControls(width, height, this);
+			controls = new IngameControls(width, height, this);
 			
 			LabelStyle labelStyle = new LabelStyle();
 			labelStyle.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
@@ -263,7 +263,6 @@ public class IngameScreen implements Screen {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		controller = new EnemyController(this, tweenManager);
-		Resources.getManager().finishLoading();
 		background = new Sprite(Resources.get(Resources.BACKGROUND_INGAME, Texture.class));
 		objectFactory = new GameObjectFactory();
 		collisionHandler = new CollisionHandler();
@@ -284,7 +283,12 @@ public class IngameScreen implements Screen {
 		player = objectFactory.createPlayer(0, 0);
 		player.setX(centerX - player.getWidth() / 2f);
 		player.setY(player.getHeight() / 2f);
+		player.addListener(particleRenderer);
 		objects.add(player);
+		
+		for (GameObjectListener l : player.getListeners()) {
+			l.onAdd(player);
+		}
 
 		planet = objectFactory.createPlanet(Math.round(centerX),
 				Math.round(centerY), tweenManager);

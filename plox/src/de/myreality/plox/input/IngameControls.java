@@ -13,7 +13,7 @@ import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.screens.IngameScreen;
 import de.myreality.plox.util.Timer;
 
-public class GameControls extends Stage implements InputProcessor {
+public class IngameControls extends Stage implements InputProcessor {
 	
 	private IngameScreen screen;
 	
@@ -25,7 +25,7 @@ public class GameControls extends Stage implements InputProcessor {
 	 * @param keepAspectRatio
 	 * @param batch
 	 */
-	public GameControls(float width, float height, boolean keepAspectRatio,
+	public IngameControls(float width, float height, boolean keepAspectRatio,
 			SpriteBatch batch, IngameScreen screen) {
 		super(width, height, keepAspectRatio, batch);
 		this.screen = screen;		
@@ -37,7 +37,7 @@ public class GameControls extends Stage implements InputProcessor {
 	 * @param height
 	 * @param keepAspectRatio
 	 */
-	public GameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen) {
+	public IngameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen) {
 		super(width, height, keepAspectRatio);
 		this.screen = screen;
 		Gdx.input.setCatchBackKey(true);
@@ -47,7 +47,7 @@ public class GameControls extends Stage implements InputProcessor {
 	 * @param width
 	 * @param height
 	 */
-	public GameControls(float width, float height, IngameScreen screen) {
+	public IngameControls(float width, float height, IngameScreen screen) {
 		super(width, height);
 		this.screen = screen;
 		Gdx.input.setCatchBackKey(true);
