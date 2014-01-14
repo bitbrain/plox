@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectListener;
+import de.myreality.plox.Resources;
 import de.myreality.plox.screens.IngameScreen;
 import de.myreality.plox.tweens.GameObjectTween;
 import de.myreality.plox.util.Timer;
@@ -19,6 +20,8 @@ public class EnemyController {
 	
 	private static final int INTERVAL = 2000;
 	
+	private static int currentInterval;
+	
 	private IngameScreen screen;
 	
 	private TweenManager tweenManager;
@@ -26,39 +29,80 @@ public class EnemyController {
 	public EnemyController(IngameScreen screen, TweenManager tweenManager) {
 		timer = new Timer();
 		timer.start();
+		currentInterval = INTERVAL;
 		this.screen = screen;
 		this.tweenManager = tweenManager;
 	}
 
 	public void update(float delta) {
-		if (timer.getTicks() > INTERVAL) {
-			GameObjectFactory f = screen.getFactory();
-			GameObject alien = f.createAlien(0, 0, screen.getPlayer(), screen.getPlanet());	
-			int x = 0;
-			int y = 0;
+		
+		int score = screen.getPlayerScore().getScore();
+		currentInterval = INTERVAL - (score / INTERVAL) / 2;
+		
+		if (currentInterval < 500) {
+			currentInterval = 500;
+		}
+		
+		if (timer.getTicks() > currentInterval) {
 			
-			int dir = (int) (Math.random() * 3);
+			int amount = 1;
 			
-			switch (dir) {
-				case 0: // LEFT EDGE
-					y = (int) (Math.random() * Gdx.graphics.getHeight());
-					break;
-				case 1:
-					x = Gdx.graphics.getWidth() - alien.getWidth();
-					y = (int) (Math.random() * Gdx.graphics.getHeight());
-					break;
-				case 2: // BOTTOM EDGE
-					x = (int) (Math.random() * Gdx.graphics.getWidth());
-					y = Gdx.graphics.getHeight() - alien.getHeight();
-					break;
+			if (Math.random() < 0.05) {
+				amount = 3;
 			}
 			
-			alien.setX(x);
-			alien.setY(y);
-			screen.add(alien);
-			alien.addListener(new EnemyShaker(alien));
+			spawnAlien(amount);
+			
 			timer.reset();
 		}
+	}
+	
+	private void spawnAlien(int amount) {
+			GameObjectFactory f = screen.getFactory();
+			
+			for (int i = 0; i < amount; ++i) {
+				GameObject alien = f.createAlien(0, 0);	
+				int x = 0;
+				int y = 0;
+				
+				int dir = (int) (Math.random() * 3);
+				
+				switch (dir) {
+					case 0: // LEFT EDGE
+						y = (int) (Math.random() * Gdx.graphics.getHeight());
+						break;
+					case 1:
+						x = Gdx.graphics.getWidth() - alien.getWidth();
+						y = (int) (Math.random() * Gdx.graphics.getHeight());
+						break;
+					case 2: // BOTTOM EDGE
+						x = (int) (Math.random() * Gdx.graphics.getWidth());
+						y = Gdx.graphics.getHeight() - alien.getHeight();
+						break;
+				}
+				
+				alien.setX(x);
+				alien.setY(y);
+				modifyAlien(alien);
+				screen.add(alien);
+				alien.addListener(new EnemyShaker(alien));
+		}
+	}
+	
+	private void modifyAlien(GameObject alien) {
+
+		double typeFactor = Math.random();
+		
+		if (typeFactor > 0.2) {
+			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * Math.random())));
+		} else {
+			alien.setTexture(Resources.ALIEN2);
+			int size = Gdx.graphics.getHeight() / 8;
+			alien.setWidth(size);
+			alien.setHeight(size);
+			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (100 + Math.random() * 100)));
+		}
+		
 	}
 	
 	private class EnemyShaker implements GameObjectListener {

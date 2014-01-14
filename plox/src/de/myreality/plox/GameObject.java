@@ -16,7 +16,7 @@ public class GameObject {
 	private int width;
 	private int height;
 	private Texture texture;
-	private GameObjectStrategy strategy;
+	private List<GameObjectStrategy> strategies;
 	private float rotation;
 	private GameObjectType type;
 	private List<GameObjectListener> listeners;
@@ -44,6 +44,7 @@ public class GameObject {
 		this.type = type;
 		this.listeners = new ArrayList<GameObjectListener>();
 		color = new Color(1f, 1f, 1f, 1f);
+		strategies = new ArrayList<GameObjectStrategy>();
 	}
 	
 	public GameObjectType getType() {
@@ -121,7 +122,7 @@ public class GameObject {
 	}
 	
 	public void update(float delta) {
-		if (strategy != null) {
+		for (GameObjectStrategy strategy : strategies) {
 			strategy.update(delta, this);
 		}
 	}
@@ -136,8 +137,16 @@ public class GameObject {
 		return width;
 	}
 	
-	public void setStrategy(GameObjectStrategy strategy) {
-		this.strategy = strategy;
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
+	public void addStrategy(GameObjectStrategy strategy) {
+		strategies.add(strategy);
 	}
 	
 	public void kill() {

@@ -13,6 +13,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -288,6 +289,10 @@ public class IngameScreen implements Screen {
 	public GameObject getPlayer() {
 		return player;
 	}
+	
+	public Scoreable getPlayerScore() {
+		return playerScore;
+	}
 
 	public Planet getPlanet() {
 		return planet;
@@ -344,9 +349,15 @@ public class IngameScreen implements Screen {
 					&& !b.getType().equals(GameObjectType.SHOT)) {
 
 				if (!b.getType().equals(GameObjectType.PLAYER)) {
+					
 					b.damage(40);
 					
-					if (b.isDead()) {
+					Sound sound = Resources.SOUND_IMPACT;
+					sound.play(0.4f, (float)(1.0f + Math.random() * 0.4), (float)(1.0f + Math.random() * 0.4));
+					
+					if (b.isDead()) {		
+						sound = Resources.SOUND_EXPLODE;
+						sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 						playerScore.addScore(50);
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");
 					} else {
@@ -363,6 +374,8 @@ public class IngameScreen implements Screen {
 			if (a.getType().equals(GameObjectType.ALIEN)
 					&& b.getType().equals(GameObjectType.PLAYER)) {
 				remove(a);
+				Sound sound = Resources.SOUND_EXPLODE;
+				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 				for (GameObjectListener l : a.getListeners()) {
 					l.onRemove(a);
 				}

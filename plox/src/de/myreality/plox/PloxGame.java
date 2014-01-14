@@ -3,6 +3,7 @@ package de.myreality.plox;
 import aurelienribon.tweenengine.Tween;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -32,6 +33,11 @@ public class PloxGame extends Game {
 		Tween.registerAccessor(Sprite.class, new SpriteTween());
 		Tween.registerAccessor(Label.class, new LabelTween());
 		Tween.registerAccessor(GameObject.class, new GameObjectTween());
+
+		// Start the music
+		Music music = Resources.MUSIC_THEME;
+		music.setLooping(true);
+		music.play();
 		
 		setScreen(new MenuScreen(this));
 	}
@@ -40,6 +46,7 @@ public class PloxGame extends Game {
 	public void dispose() {
 		super.dispose();
 		Resources.dispose();
+		google.logout();
 	}
 
 	@Override

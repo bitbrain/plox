@@ -1,6 +1,8 @@
 package de.myreality.plox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -11,6 +13,7 @@ public final class Resources {
 	public static Texture PLANET_BROKEN;
 	public static Texture PLANET_DESTROYED;
 	public static Texture ALIEN;
+	public static Texture ALIEN2;
 	public static Texture PLAYER;
 	public static Texture SHOT;
 	public static Texture LOGO;
@@ -27,12 +30,19 @@ public final class Resources {
 	
 	public static BitmapFont BITMAP_FONT_REGULAR;
 	
+	public static Music MUSIC_THEME;
+	
+	public static Sound SOUND_SHOT;	
+	public static Sound SOUND_IMPACT;
+	public static Sound SOUND_EXPLODE;
+	
 	public static void load() {
 		
 		PLANET_HEAL = new Texture("data/planet-heal.png");
 		PLANET_BROKEN = new Texture("data/planet-broken.png");
 		PLANET_DESTROYED = new Texture("data/planet-destroyed.png");
 		ALIEN = new Texture("data/alien.png");
+		ALIEN2 = new Texture("data/alien2.png");
 		PLAYER = new Texture("data/player.png");
 		SHOT = new Texture("data/shot.png");
 		LOGO = new Texture("data/logo.png");
@@ -61,6 +71,12 @@ PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"),
                 Gdx.files.internal("data"));
 		
 		BITMAP_FONT_REGULAR = new BitmapFont(Gdx.files.internal("data/medium.fnt"), false);
+		
+		MUSIC_THEME = Gdx.audio.newMusic(Gdx.files.internal("data/plox.mp3"));
+		
+		SOUND_SHOT = Gdx.audio.newSound(Gdx.files.internal("data/shot.mp3"));
+		SOUND_IMPACT = Gdx.audio.newSound(Gdx.files.internal("data/impact.mp3"));
+		SOUND_EXPLODE = Gdx.audio.newSound(Gdx.files.internal("data/explode.mp3"));
 	}
 	
 	public static void dispose() {
@@ -75,6 +91,10 @@ PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"),
 		
 		if (ALIEN != null) {
 			ALIEN.dispose();
+		}
+		
+		if (ALIEN2 != null) {
+			ALIEN2.dispose();
 		}
 		
 		if (PLANET_DESTROYED != null) {
@@ -123,6 +143,22 @@ PARTICLES_EXPLOSION_SMALL.load(Gdx.files.internal("data/explosion-small"),
 		
 		if (BITMAP_FONT_REGULAR != null) {
 			BITMAP_FONT_REGULAR.dispose();
+		}
+		
+		if (MUSIC_THEME != null) {
+			MUSIC_THEME.dispose();
+		}
+		
+		if (SOUND_SHOT != null) {
+			SOUND_SHOT.dispose();
+		}
+		
+		if (SOUND_IMPACT != null) {
+			SOUND_IMPACT.dispose();
+		}
+		
+		if (SOUND_IMPACT != null) {
+			SOUND_EXPLODE.dispose();
 		}
 		
 	}

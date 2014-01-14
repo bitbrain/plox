@@ -3,20 +3,20 @@ package de.myreality.plox;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 
-import de.myreality.plox.ai.AlienStrategy;
+import de.myreality.plox.ai.DirectionStrategy;
 import de.myreality.plox.ai.RotationStrategy;
-import de.myreality.plox.ai.TargetStrategy;
 
 public class GameObjectFactory {
 	
 	
-	public GameObject createAlien(int x, int y, GameObject player, Planet planet) {
+	public GameObject createAlien(int x, int y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		
 		GameObject object = new GameObject(x, y, 100, size, size, Resources.ALIEN, GameObjectType.ALIEN);		
-		object.setStrategy(new AlienStrategy(player, planet));
+
 		return object;
 	}
 	
@@ -24,7 +24,7 @@ public class GameObjectFactory {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		GameObject object = new GameObject(x, y, 100, size, size, Resources.PLAYER, GameObjectType.PLAYER);
-		object.setStrategy(new RotationStrategy());
+		object.addStrategy(new RotationStrategy());
 		return object;
 	}
 	
@@ -33,7 +33,14 @@ public class GameObjectFactory {
 		int size = Gdx.graphics.getHeight() / 20;
 		
 		GameObject object = new GameObject(x, y, 100, size, size, Resources.SHOT, GameObjectType.SHOT);		
-		object.setStrategy(new TargetStrategy(x, y, targetX, targetY, speed));
+		object.addStrategy(new DirectionStrategy(x, y, targetX, targetY, speed));
+		
+		// Sound effect here!
+		Sound s = Resources.SOUND_SHOT;
+		long id = s.play(0.2f);
+		s.setPan(id, (float) (1.0f + Math.random()), 0.2f);
+		s.setPitch(id, (float) (1.2f + Math.random() * 0.4f));
+		
 		return object;
 	}
 	

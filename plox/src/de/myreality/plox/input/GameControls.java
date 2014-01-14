@@ -108,8 +108,13 @@ public class GameControls extends Stage implements InputProcessor {
 			final int INTERVAL = 400;
 			boolean shoot = false;
 			
+			int score = screen.getPlayerScore().getScore();
+			
+			
+			int currentInterval = INTERVAL - (score / 2000) / 2;
+			
 			if (timer != null && timer.isRunning()) {
-				if (timer.getTicks() > INTERVAL) {
+				if (timer.getTicks() > currentInterval) {
 					shoot = true;
 					timer.reset();
 				}
