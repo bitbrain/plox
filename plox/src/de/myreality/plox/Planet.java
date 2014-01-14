@@ -45,11 +45,11 @@ public class Planet extends GameObject {
 	}
 	
 	@Override
-	public void damage(int damage) {
+	public void damage(int damage, GameObject cause) {
 		
 		int oldLife = getCurrentLife();
 		
-		super.damage(damage);
+		super.damage(damage, cause);
 		
 		if (getCurrentLife() <= 150 && oldLife > 150) {
 			state = PlanetState.BROKEN;

@@ -85,7 +85,7 @@ public class GameObject {
 		this.rotation = rotation;
 	}
 	
-	public void damage(int damage) {
+	public void damage(int damage, GameObject cause) {
 		currentLife -= damage;
 		
 		if (currentLife < 0) {
@@ -93,7 +93,7 @@ public class GameObject {
 		}
 		
 		for (GameObjectListener l : listeners) {
-			l.onDamage(this);
+			l.onDamage(this, cause);
 		}
 		
 		if (damage == 0) {

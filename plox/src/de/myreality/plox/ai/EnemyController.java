@@ -24,7 +24,7 @@ public class EnemyController {
 	
 	private Timer timer;
 	
-	private static final int INTERVAL = 2000;
+	private static final int INTERVAL = 2500;
 	
 	private static int currentInterval;
 	
@@ -43,10 +43,10 @@ public class EnemyController {
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score / INTERVAL);
+		currentInterval = INTERVAL - (score * 250 / INTERVAL);
 		
-		if (currentInterval < 500) {
-			currentInterval = 500;
+		if (currentInterval < 100) {
+			currentInterval = 100;
 		}
 		
 		if (timer.getTicks() > currentInterval) {
@@ -54,9 +54,9 @@ public class EnemyController {
 			int amount = 1;
 			
 			if (Math.random() < 0.05) {
-				amount = (int) (Math.random() * 5 + 1);
+				amount = (int) (Math.random() * 6 + 1);
 			} else if (Math.random() < 0.1) {
-				amount = (int) (Math.random() * 2 + 1);
+				amount = (int) (Math.random() * 3 + 1);
 			}
 			
 			spawnAlien(amount);
@@ -93,6 +93,7 @@ public class EnemyController {
 				alien.setY(y);
 				modifyAlien(alien);
 				screen.add(alien);
+				alien.addListener(screen.getAchievementManager());
 				alien.addListener(new EnemyShaker(alien));
 		}
 	}
@@ -113,16 +114,16 @@ public class EnemyController {
 			alien.setMaxLife(score / 100 + 50);
 		}
 		
-		if (Math.random() < 0.1) {
+		if (Math.random() < 0.05) {
 			alien.addPowerUp(new ShootSizePowerUp(5));
-		} else if (Math.random() < 0.08) {
-			alien.addPowerUp(new ShootDamagePowerUp(10));
-		} else if (Math.random() < 0.1) {
-			alien.addPowerUp(new ShootSpeedPowerUp(1));
+		} else if (Math.random() < 0.03) {
+			alien.addPowerUp(new ShootDamagePowerUp(25));
 		} else if (Math.random() < 0.05) {
-			alien.addPowerUp(new HealPowerUp(25));
+			alien.addPowerUp(new ShootSpeedPowerUp(5));
+		} else if (Math.random() < 0.02) {
+			alien.addPowerUp(new HealPowerUp(50));
 		} else if (Math.random() < 0.01) {
-			alien.addPowerUp(new ProtectorPowerUp(200));
+			alien.addPowerUp(new ProtectorPowerUp(alien.getMaxLife() * 2));
 		}
 	}
 	
@@ -159,7 +160,7 @@ public class EnemyController {
 		}
 
 		@Override
-		public void onDamage(GameObject object) {
+		public void onDamage(GameObject object, GameObject cause) {
 			tweenManager.killTarget(target);
 			float padding = 5;
 			Tween.to(target, GameObjectTween.SHAKE_X, 0.02f)

@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -41,6 +40,7 @@ import de.myreality.plox.Scoreable;
 import de.myreality.plox.Shot;
 import de.myreality.plox.ai.EnemyController;
 import de.myreality.plox.ai.RotationStrategy;
+import de.myreality.plox.google.AchievementManager;
 import de.myreality.plox.google.GoogleInterface;
 import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.IngameControls;
@@ -86,6 +86,8 @@ public class IngameScreen implements Screen, GameContext {
 	private boolean over;
 	
 	private PopupManager popupManager;
+	
+	private AchievementManager achievementManager;
 
 	private boolean fadeActivated;
 
@@ -264,6 +266,10 @@ public class IngameScreen implements Screen, GameContext {
 	public boolean isOver() {
 		return over;
 	}
+	
+	public AchievementManager getAchievementManager() {
+		return achievementManager;
+	}
 
 	@Override
 	public void show() {
@@ -278,6 +284,8 @@ public class IngameScreen implements Screen, GameContext {
 		collisionHandler = new CollisionHandler(this);
 		particleRenderer = new ParticleRenderer();
 		playerScore = new PlayerScore();
+		achievementManager = new AchievementManager(game.getGoogle());
+		playerScore.addListener(achievementManager);
 		float centerX = Gdx.graphics.getWidth() / 2f;
 		float centerY = Gdx.graphics.getHeight() / 2f;
 		gameOver = new Sprite(Resources.get(Resources.GAMEOVER, Texture.class));
@@ -389,9 +397,8 @@ public class IngameScreen implements Screen, GameContext {
 
 				if (!b.getType().equals(GameObjectType.PLAYER)) {
 					
-					Shot shot = (Shot)a;
-					
-					b.damage(shot.getDamage());
+					Shot shot = (Shot)a;					
+					b.damage(shot.getDamage(), shot);
 					
 					Sound sound = Resources.get(Resources.SOUND_IMPACT, Sound.class);
 					sound.play(0.4f, (float)(1.0f + Math.random() * 0.4), (float)(1.0f + Math.random() * 0.4));
@@ -426,7 +433,7 @@ public class IngameScreen implements Screen, GameContext {
 				remove(a);
 				Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
-				b.damage(50);
+				b.damage(50, a);
 				
 				tweenManager.killTarget(b);
 				float padding = 5;

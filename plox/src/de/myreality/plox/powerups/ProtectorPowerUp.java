@@ -40,13 +40,13 @@ public class ProtectorPowerUp implements PowerUpStrategy {
 		float x = (float) (player.getCenterX() + Math.cos(Math.toRadians(angle)) * pointer);
 		float y = (float) (player.getCenterY() + Math.sin(Math.toRadians(angle)) * pointer);
 		
-		GameObject shot = factory.createShot(x, y, size, protectorDamage, new OrbitStrategy(player, angle, pointer));
+		GameObject shot = factory.createShot(x, y, size, protectorDamage, new OrbitStrategy(player, angle, pointer), true);
 		context.add(shot);
 		
 		PopupManager popupManager = context.getPopupManager();		
 		LabelStyle style = new LabelStyle();
 		style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
-		style.fontColor = new Color(0.5f, 1f, 0f, 1f);
+		style.fontColor = new Color(0.0f, 0.2f, 1f, 1f);
 		popupManager.popup(powerup.getCenterX(), powerup.getCenterY(), "Protector", style);
 	}
 

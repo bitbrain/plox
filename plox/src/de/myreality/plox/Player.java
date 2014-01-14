@@ -15,7 +15,7 @@ public class Player extends GameObject {
 		super(x, y, 200, size, size, Resources.get(Resources.PLAYER, Texture.class), GameObjectType.PLAYER);
 		this.shootSpeed = 10;
 		this.shootDamage = 40;
-		this.shootSize = Gdx.graphics.getWidth() / 25;
+		this.shootSize = Gdx.graphics.getWidth() / 60;
 	}
 
 	public float getShootSpeed() {

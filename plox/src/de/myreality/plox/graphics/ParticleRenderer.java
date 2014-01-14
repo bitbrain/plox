@@ -167,7 +167,7 @@ public class ParticleRenderer  implements GameObjectListener{
 	}
 
 	@Override
-	public void onDamage(GameObject object) {
+	public void onDamage(GameObject object, GameObject cause) {
 		// TODO Auto-generated method stub
 		
 	}

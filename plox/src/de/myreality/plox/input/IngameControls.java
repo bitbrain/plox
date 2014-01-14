@@ -74,9 +74,9 @@ public class IngameControls extends Stage implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		super.touchDragged(screenX, screenY, pointer);	
+		boolean touched = super.touchDragged(screenX, screenY, pointer);	
 		
-		if (!screen.isOver() && pointer == 0 && !Gdx.app.getType().equals(ApplicationType.Desktop)) {
+		if (!touched && !screen.isOver() && pointer == 0 && !Gdx.app.getType().equals(ApplicationType.Desktop)) {
 		
 			GameObject player = screen.getPlayer();
 			
@@ -106,7 +106,7 @@ public class IngameControls extends Stage implements InputProcessor {
 			
 			player.setX(player.getX() + vec.x * speed);
 			player.setY(player.getY() + vec.y * speed);
-		} else if (!screen.isOver() && Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
+		} else if (!touched && !screen.isOver() && Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
 			
 			Player player = screen.getPlayer();
 			
@@ -140,7 +140,7 @@ public class IngameControls extends Stage implements InputProcessor {
 			}
 		}
 		
-		return true;
+		return touched;
 	}
 	
 	

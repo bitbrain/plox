@@ -40,12 +40,12 @@ public class GameObjectFactory {
 	}
 	
 	public GameObject createShot(float x, float y, int targetX, int targetY, int speed, int size, int damage) {	
-		return createShot(x, y, size, damage, new DirectionStrategy(x, y, targetX, targetY, speed));
+		return createShot(x, y, size, damage, new DirectionStrategy(x, y, targetX, targetY, speed), false);
 	}
 	
-	public GameObject createShot(float x, float y, int size, int damage, GameObjectStrategy strategy) {	
+	public GameObject createShot(float x, float y, int size, int damage, GameObjectStrategy strategy, boolean protector) {	
 		
-		GameObject object = new Shot(x, y, size, size, damage);		
+		GameObject object = new Shot(x, y, size, size, damage, protector);		
 		object.addStrategy(strategy);
 		
 		// Sound effect here!

@@ -26,7 +26,7 @@ public class TargetStrategy implements GameObjectStrategy {
 		Vector2 vec = new Vector2(target.getCenterX() - source.getCenterX(), target.getCenterY() - source.getCenterY());
 		
 		if (vec.len() < 10) {
-			target.damage(50);
+			target.damage(50, source);
 			source.kill();
 			Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 			sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));

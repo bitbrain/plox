@@ -10,5 +10,5 @@ public interface GameObjectListener {
 	
 	void onAdd(GameObject object);
 	
-	void onDamage(GameObject object);
+	void onDamage(GameObject object, GameObject cause);
 }
