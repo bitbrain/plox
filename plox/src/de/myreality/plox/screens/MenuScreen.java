@@ -7,7 +7,6 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -36,7 +35,6 @@ public class MenuScreen implements Screen {
 	private Sprite logo;
 	private float logoWidth, logoHeight;
 	private TweenManager tweenManager;
-	private boolean lastTouched = true;
 	private Stage stage;
 	private boolean connected;
 

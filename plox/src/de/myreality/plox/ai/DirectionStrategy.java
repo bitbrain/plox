@@ -10,7 +10,7 @@ public class DirectionStrategy implements GameObjectStrategy {
 	private float speed;
 	private Vector2 velocity;
 	
-	public DirectionStrategy(int x, int y, int targetX, int targetY, float speed) {
+	public DirectionStrategy(float x, float y, float targetX, float targetY, float speed) {
 		this.speed = speed;		
 		velocity = new Vector2(targetX - x, targetY - y);
 		velocity.nor();

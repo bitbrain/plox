@@ -5,5 +5,6 @@ public enum GameObjectType {
 	SHOT,
 	ALIEN,
 	PLAYER,
-	PLANET
+	PLANET,
+	POWERUP
 }

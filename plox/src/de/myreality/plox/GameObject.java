@@ -21,6 +21,7 @@ public class GameObject {
 	private GameObjectType type;
 	private List<GameObjectListener> listeners;
 	private Color color;
+	private List<PowerUpStrategy> powerUps;
 
 	/**
 	 * @param y
@@ -42,6 +43,7 @@ public class GameObject {
 		this.height = height;
 		this.texture = texture;
 		this.type = type;
+		powerUps = new ArrayList<PowerUpStrategy>();
 		this.listeners = new ArrayList<GameObjectListener>();
 		color = new Color(1f, 1f, 1f, 1f);
 		strategies = new ArrayList<GameObjectStrategy>();
@@ -57,6 +59,14 @@ public class GameObject {
 	
 	public float getY() {
 		return y;
+	}
+	
+	public List<PowerUpStrategy> getPowerUps() {
+		return powerUps;
+	}
+	
+	public void addPowerUp(PowerUpStrategy strategy) {
+		powerUps.add(strategy);
 	}
 	
 	public int getCurrentLife() {
@@ -180,7 +190,7 @@ public class GameObject {
 	
 	public void setMaxLife(int maxLife) {
 		this.maxLife = maxLife;
-		if (this.currentLife > maxLife) {
+		if (this.currentLife != maxLife) {
 			this.currentLife = maxLife;
 		}
 	}

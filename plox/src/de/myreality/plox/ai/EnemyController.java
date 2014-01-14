@@ -93,15 +93,17 @@ public class EnemyController {
 	private void modifyAlien(GameObject alien) {
 
 		double typeFactor = Math.random();
-		
+		int score = screen.getPlayerScore().getScore();
 		if (typeFactor > 0.2) {
 			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * Math.random())));
+			alien.setMaxLife(score / 70 + 60);
 		} else {
 			alien.setTexture(Resources.get(Resources.ALIEN2, Texture.class));
 			int size = Gdx.graphics.getHeight() / 8;
 			alien.setWidth(size);
 			alien.setHeight(size);
 			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (100 + Math.random() * 100)));
+			alien.setMaxLife(score / 100 + 50);
 		}
 		
 	}

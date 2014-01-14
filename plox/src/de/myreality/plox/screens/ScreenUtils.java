@@ -12,4 +12,8 @@ public final class ScreenUtils {
 		&& o.getY() + o.getHeight() > 0
 		&& o.getY() < Gdx.graphics.getHeight());
 	}
+	
+	public static void alignToScreen(GameObject o) {
+		// TODO
+	}
 }

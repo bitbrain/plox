@@ -12,7 +12,7 @@ import de.myreality.plox.ai.RotationStrategy;
 public class GameObjectFactory {
 	
 	
-	public GameObject createAlien(int x, int y) {
+	public GameObject createAlien(float x, float y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		
@@ -21,7 +21,7 @@ public class GameObjectFactory {
 		return object;
 	}
 	
-	public GameObject createPlayer(int x, int y) {
+	public GameObject createPlayer(float x, float y) {
 		
 		int size = Gdx.graphics.getHeight() / 6;
 		GameObject object = new Player(x, y, size);
@@ -29,7 +29,11 @@ public class GameObjectFactory {
 		return object;
 	}
 	
-	public GameObject createShot(int x, int y, int targetX, int targetY, float speed, int size, int damage) {	
+	public GameObject createPowerUp(float x, float y, PowerUpStrategy strategy) {
+		return new PowerUp(x, y, strategy);
+	}
+	
+	public GameObject createShot(float x, float y, float targetX, float targetY, float speed, int size, int damage) {	
 		
 		GameObject object = new Shot(x, y, size, size, damage);		
 		object.addStrategy(new DirectionStrategy(x, y, targetX, targetY, speed));
@@ -43,7 +47,7 @@ public class GameObjectFactory {
 		return object;
 	}
 	
-	public Planet createPlanet(int x, int y, TweenManager manager) {
+	public Planet createPlanet(float x, float y, TweenManager manager) {
 		
 		int size = Gdx.graphics.getWidth() / 3;
 		

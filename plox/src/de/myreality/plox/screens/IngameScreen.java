@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
+import de.myreality.plox.GameContext;
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectListener;
@@ -32,6 +33,8 @@ import de.myreality.plox.Planet;
 import de.myreality.plox.Player;
 import de.myreality.plox.PlayerScore;
 import de.myreality.plox.PloxGame;
+import de.myreality.plox.PowerUp;
+import de.myreality.plox.PowerUpStrategy;
 import de.myreality.plox.Resources;
 import de.myreality.plox.Scoreable;
 import de.myreality.plox.Shot;
@@ -44,7 +47,7 @@ import de.myreality.plox.tweens.SpriteTween;
 import de.myreality.plox.ui.PopupManager;
 import de.myreality.plox.ui.ScoreLabel;
 
-public class IngameScreen implements Screen {
+public class IngameScreen implements Screen, GameContext {
 
 	private Planet planet;
 
@@ -202,6 +205,11 @@ public class IngameScreen implements Screen {
 				}
 
 				remove(o);
+				// Spawn powerups here
+				for (PowerUpStrategy s : o.getPowerUps()) {
+					GameObject powerUp = objectFactory.createPowerUp(o.getCenterX(), o.getCenterY(), s);
+					add(powerUp);
+				}
 			}
 		}
 
@@ -267,7 +275,7 @@ public class IngameScreen implements Screen {
 		controller = new EnemyController(this, tweenManager);
 		background = new Sprite(Resources.get(Resources.BACKGROUND_INGAME, Texture.class));
 		objectFactory = new GameObjectFactory();
-		collisionHandler = new CollisionHandler();
+		collisionHandler = new CollisionHandler(this);
 		particleRenderer = new ParticleRenderer();
 		playerScore = new PlayerScore();
 		float centerX = Gdx.graphics.getWidth() / 2f;
@@ -297,14 +305,17 @@ public class IngameScreen implements Screen {
 		
 	}
 
+	@Override
 	public Player getPlayer() {
 		return (Player) player;
 	}
 	
+	@Override
 	public Scoreable getPlayerScore() {
 		return playerScore;
 	}
 
+	@Override
 	public Planet getPlanet() {
 		return planet;
 	}
@@ -336,6 +347,7 @@ public class IngameScreen implements Screen {
 		controls.dispose();
 	}
 
+	@Override
 	public void add(GameObject object) {
 		objects.add(object);
 		object.addListener(particleRenderer);
@@ -344,8 +356,14 @@ public class IngameScreen implements Screen {
 		}
 	}
 
+	@Override
 	public void remove(GameObject object) {
 		objects.remove(object);
+	}
+	
+	@Override
+	public ParticleRenderer getParticleRenderer() {
+		return particleRenderer;
 	}
 
 	public void gameover() {
@@ -353,11 +371,18 @@ public class IngameScreen implements Screen {
 	}
 
 	private class CollisionHandler {
+		
+		private GameContext context;
+		
+		public CollisionHandler(GameContext context) {
+			this.context = context;
+		}
 
 		public void collide(GameObject a, GameObject b) {
 
 			if (a.getType().equals(GameObjectType.SHOT)
-					&& !b.getType().equals(GameObjectType.SHOT)) {
+					&& !b.getType().equals(GameObjectType.SHOT)
+					&& !b.getType().equals(GameObjectType.POWERUP)) {
 
 				if (!b.getType().equals(GameObjectType.PLAYER)) {
 					
@@ -372,7 +397,7 @@ public class IngameScreen implements Screen {
 						sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 						sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 						playerScore.addScore(b.getMaxLife());
-						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");
+						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");						
 					} else {
 						playerScore.addScore(10);
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "10");
@@ -381,6 +406,14 @@ public class IngameScreen implements Screen {
 					for (GameObjectListener l : a.getListeners()) {
 						l.onRemove(a);
 					}
+				}
+			} else if (a.getType().equals(GameObjectType.POWERUP)
+					&& b.getType().equals(GameObjectType.PLAYER)) {
+				PowerUp powerUp = (PowerUp)a;
+				powerUp.onCollect(context);
+				
+				if (powerUp.isUseable()) {
+					b.addPowerUp(powerUp.getStrategy());
 				}
 			}
 
