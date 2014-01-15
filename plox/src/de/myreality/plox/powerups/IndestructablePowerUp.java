@@ -45,6 +45,7 @@ public class IndestructablePowerUp implements PowerUpStrategy {
 
 	private void animate(final GameObject o, final PopupManager manager) {
 		o.getColor().a = 0.7f;
+		tweenManager.killTarget(o);
 		Tween.to(o, GameObjectTween.ALPHA, 0.7f).target(0.4f)
 				.ease(TweenEquations.easeInOutQuad)
 				.setCallback(new TweenCallback() {

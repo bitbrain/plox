@@ -435,12 +435,12 @@ public class IngameScreen implements Screen, GameContext {
 			if (a.getType().equals(GameObjectType.ALIEN)
 					&& b.getType().equals(GameObjectType.PLAYER)) {
 
-				Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
-				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
-				a.damage(50, b);
-				b.damage(50, a);
 				
 				if (!b.isIndestructable()) {
+					
+					b.damage(20, a);
+					a.kill();
+					
 					tweenManager.killTarget(b);
 					float padding = 5;
 					Tween.to(b, GameObjectTween.SHAKE_X, 0.02f)
@@ -453,8 +453,17 @@ public class IngameScreen implements Screen, GameContext {
 			        .ease(TweenEquations.easeInOutQuad)
 			        .repeatYoyo(10, 0).start(tweenManager);
 				} else {
-					playerScore.addScore(25);
-					popupManager.popup(b.getCenterX(), b.getCenterY(), "25");
+					a.damage(25, b);
+					playerScore.addScore(10);
+					popupManager.popup(b.getCenterX(), b.getCenterY(), "10");
+				}
+				
+				if (a.isDead()) {
+					Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
+					sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
+				} else {
+					Sound sound = Resources.get(Resources.SOUND_IMPACT, Sound.class);
+					sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 				}
 			}
 		}

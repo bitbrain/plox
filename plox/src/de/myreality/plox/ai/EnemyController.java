@@ -44,7 +44,7 @@ public class EnemyController {
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score * 100 / INTERVAL);
+		currentInterval = INTERVAL - (score * 20 / INTERVAL);
 		
 		if (currentInterval < 100) {
 			currentInterval = 100;
@@ -118,17 +118,17 @@ public class EnemyController {
 		}
 		
 		if (Math.random() < 0.05) {
-			alien.addPowerUp(new ShootSizePowerUp(5));
+			alien.addPowerUp(new ShootSizePowerUp((int) (Math.random() * 5 + 1)));
 		} else if (Math.random() < 0.03) {
-			alien.addPowerUp(new ShootDamagePowerUp(25));
+			alien.addPowerUp(new ShootDamagePowerUp((int) (Math.random() * 25 + 10)));
 		} else if (Math.random() < 0.05) {
-			alien.addPowerUp(new ShootSpeedPowerUp(5));
+			alien.addPowerUp(new ShootSpeedPowerUp((int) (Math.random() * 5 + 1)));
 		} else if (Math.random() < 0.02) {
-			alien.addPowerUp(new HealPowerUp(50));
-		} else if (Math.random() < 0.01) {
+			alien.addPowerUp(new HealPowerUp((int) (Math.random() * 50 + 50)));
+		} else if (Math.random() < 0.02) {
 			alien.addPowerUp(new ProtectorPowerUp(alien.getMaxLife() * 2));
-		} else {
-			alien.addPowerUp(new IndestructablePowerUp(tweenManager, 10f));
+		} else if (Math.random() < 0.01) {
+			alien.addPowerUp(new IndestructablePowerUp(tweenManager, (float) (Math.random() * 5 + 5)));
 		}
 	}
 	
