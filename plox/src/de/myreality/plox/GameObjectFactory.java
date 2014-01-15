@@ -59,7 +59,7 @@ public class GameObjectFactory {
 	
 	public Planet createPlanet(float x, float y, TweenManager manager) {
 		
-		int size = Gdx.graphics.getWidth() / 3;
+		int size = Gdx.graphics.getHeight() / 3;
 		
 		x -= size / 2f;
 		y -= size / 2f;

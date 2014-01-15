@@ -63,6 +63,8 @@ public class AchievementManager implements ScoreableListener, GameObjectListener
 	public void onDamage(GameObject object, GameObject cause) {
 		if (cause.getType().equals(GameObjectType.SHOT)) {
 			Shot shot = (Shot)cause;
+
+			killCount = 0;
 			
 			if (shot.isProtector() && object.isDead()) {
 				google.incrementAchievement(Achievements.PROTECTOR_I, 1);

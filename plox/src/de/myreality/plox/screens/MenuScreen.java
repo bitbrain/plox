@@ -118,6 +118,7 @@ public class MenuScreen implements Screen {
 			connected = true;
 			Image imgWorldlist = new Image(Resources.get(Resources.BUTTON_RANK, Texture.class));
 			stage.addActor(imgWorldlist);
+			
 			imgWorldlist.setScale(4f);
 			imgWorldlist.setPosition(80, 80);
 			Image imgAchievements = new Image(Resources.get(Resources.BUTTON_ACHIEVEMENTS, Texture.class));

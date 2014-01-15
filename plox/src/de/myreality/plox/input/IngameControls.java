@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.myreality.plox.GameObject;
 import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.Player;
+import de.myreality.plox.PloxGame;
 import de.myreality.plox.screens.IngameScreen;
+import de.myreality.plox.screens.MenuScreen;
 import de.myreality.plox.util.Timer;
 
 public class IngameControls extends Stage implements InputProcessor {
@@ -20,6 +22,8 @@ public class IngameControls extends Stage implements InputProcessor {
 	
 	private Timer timer;
 	
+	private PloxGame game;
+	
 	/**
 	 * @param width
 	 * @param height
@@ -27,9 +31,10 @@ public class IngameControls extends Stage implements InputProcessor {
 	 * @param batch
 	 */
 	public IngameControls(float width, float height, boolean keepAspectRatio,
-			SpriteBatch batch, IngameScreen screen) {
+			SpriteBatch batch, IngameScreen screen, PloxGame game) {
 		super(width, height, keepAspectRatio, batch);
 		this.screen = screen;		
+		this.game = game;
 		Gdx.input.setCatchBackKey(true);
 	}
 
@@ -38,20 +43,22 @@ public class IngameControls extends Stage implements InputProcessor {
 	 * @param height
 	 * @param keepAspectRatio
 	 */
-	public IngameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen) {
+	public IngameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen, PloxGame game) {
 		super(width, height, keepAspectRatio);
 		this.screen = screen;
 		Gdx.input.setCatchBackKey(true);
+		this.game = game;
 	}
 
 	/**
 	 * @param width
 	 * @param height
 	 */
-	public IngameControls(float width, float height, IngameScreen screen) {
+	public IngameControls(float width, float height, IngameScreen screen, PloxGame game) {
 		super(width, height);
 		this.screen = screen;
 		Gdx.input.setCatchBackKey(true);
+		this.game = game;
 	}
 	
 	
@@ -63,14 +70,28 @@ public class IngameControls extends Stage implements InputProcessor {
 		switch (keyCode) {
 			 // ABORT GAME
 	        case Keys.BACK: case Keys.ESCAPE:
-	                screen.gameover();
+	        		if (!screen.isOver()) {
+	        			screen.gameover();
+	        		} else {
+	        			game.setScreen(new MenuScreen(game));
+	        		}
 	                return true;
 		}
 		
 		return value;
 	}
-	
-	
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		boolean state = super.touchDown(screenX, screenY, pointer, button);
+		
+		if (screen.isOver()) {
+			game.setScreen(new MenuScreen(game));
+			return true;
+		}
+		
+		return state;
+	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
@@ -142,6 +163,5 @@ public class IngameControls extends Stage implements InputProcessor {
 		
 		return touched;
 	}
-	
 	
 }

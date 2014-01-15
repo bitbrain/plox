@@ -3,9 +3,7 @@ package de.myreality.plox.screens;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
@@ -92,8 +90,6 @@ public class IngameScreen implements Screen, GameContext {
 
 	private boolean fadeActivated;
 
-	private int fadeCount = 0;
-
 	public IngameScreen(PloxGame game) {
 		this.game = game;
 	}
@@ -131,13 +127,7 @@ public class IngameScreen implements Screen, GameContext {
 			particleRenderer.clear();
 
 			for (GameObject o : objects) {
-				Tween.to(o, GameObjectTween.ALPHA, 2f).target(0.3f)
-						.setCallback(new TweenCallback() {
-							@Override
-							public void onEvent(int type, BaseTween<?> source) {
-								fadeCount++;
-							}
-						}).ease(TweenEquations.easeInOutQuad)
+				Tween.to(o, GameObjectTween.ALPHA, 2f).target(0.3f).ease(TweenEquations.easeInOutQuad)
 						.start(tweenManager);
 			}
 			((ScoreLabel)pointLabel).reset();
@@ -145,13 +135,7 @@ public class IngameScreen implements Screen, GameContext {
 			pointLabel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
 			controls.clear();
 			controls.addActor(pointLabel);
-			Tween.to(planet, GameObjectTween.ALPHA, 2f).target(0.3f)
-					.setCallback(new TweenCallback() {
-						@Override
-						public void onEvent(int type, BaseTween<?> source) {
-							fadeCount++;
-						}
-					}).ease(TweenEquations.easeOutQuad).start(tweenManager);
+			Tween.to(planet, GameObjectTween.ALPHA, 2f).target(0.3f).ease(TweenEquations.easeOutQuad).start(tweenManager);
 
 			Tween.to(gameOver, SpriteTween.ALPHA, 0.6f).target(1.0f)
 					.ease(TweenEquations.easeInOutQuad).start(tweenManager);
@@ -224,12 +208,6 @@ public class IngameScreen implements Screen, GameContext {
 		if (player.isDead() || planet.isDead()) {
 			gameover();
 		}
-
-		if (fadeCount >= objects.size() && (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.BACK))) {
-			GoogleInterface google = game.getGoogle();
-			google.submitScore(playerScore.getScore());
-			game.setScreen(new MenuScreen(game));
-		}
 	}
 	
 	@Override
@@ -242,7 +220,7 @@ public class IngameScreen implements Screen, GameContext {
 		if (controls != null) {
 			controls.setViewport(width, height);
 		} else {
-			controls = new IngameControls(width, height, this);
+			controls = new IngameControls(width, height, this, game);
 			
 			LabelStyle labelStyle = new LabelStyle();
 			labelStyle.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
@@ -382,6 +360,8 @@ public class IngameScreen implements Screen, GameContext {
 	}
 
 	public void gameover() {
+		GoogleInterface google = game.getGoogle();
+		google.submitScore(playerScore.getScore());
 		over = true;
 	}
 
@@ -453,7 +433,7 @@ public class IngameScreen implements Screen, GameContext {
 			        .ease(TweenEquations.easeInOutQuad)
 			        .repeatYoyo(10, 0).start(tweenManager);
 				} else {
-					a.damage(25, b);
+					a.damage((int) (b.getMaxLife() / 2f), b);
 					playerScore.addScore(10);
 					popupManager.popup(b.getCenterX(), b.getCenterY(), "10");
 				}

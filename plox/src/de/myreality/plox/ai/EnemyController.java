@@ -1,5 +1,7 @@
 package de.myreality.plox.ai;
 
+import java.util.Random;
+
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
@@ -33,18 +35,21 @@ public class EnemyController {
 	
 	private TweenManager tweenManager;
 	
+	private Random random;
+	
 	public EnemyController(IngameScreen screen, TweenManager tweenManager) {
 		timer = new Timer();
 		timer.start();
 		currentInterval = INTERVAL;
 		this.screen = screen;
+		random = new Random(System.currentTimeMillis());
 		this.tweenManager = tweenManager;
 	}
 
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score * 20 / INTERVAL);
+		currentInterval = INTERVAL - (score * 100 / INTERVAL);
 		
 		if (currentInterval < 100) {
 			currentInterval = 100;
@@ -52,12 +57,12 @@ public class EnemyController {
 		
 		if (timer.getTicks() > currentInterval) {
 			
-			int amount = 1;
+			int amount = (int) (random.nextFloat() * 3f);
 			
-			if (Math.random() < 0.05) {
-				amount = (int) (Math.random() * 6 + 1);
-			} else if (Math.random() < 0.1) {
-				amount = (int) (Math.random() * 3 + 1);
+			if (random.nextFloat() < 0.3) {
+				amount = (int) (Math.random() * 3 + 3);
+			} else if (random.nextFloat() < 0.05) {
+				amount = (int) (Math.random() * 6 + 3);
 			}
 			
 			spawnAlien(amount);
@@ -106,29 +111,29 @@ public class EnemyController {
 		double typeFactor = Math.random();
 		int score = screen.getPlayerScore().getScore();
 		if (typeFactor > 0.2) {
-			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * Math.random())));
-			alien.setMaxLife(score / 70 + 60);
+			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * random.nextFloat())));
+			alien.setMaxLife(score / 500 + 60);
 		} else {
 			alien.setTexture(Resources.get(Resources.ALIEN2, Texture.class));
 			int size = Gdx.graphics.getHeight() / 8;
 			alien.setWidth(size);
 			alien.setHeight(size);
-			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (100 + Math.random() * 100)));
-			alien.setMaxLife(score / 100 + 50);
+			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (100 + random.nextFloat() * (score / 1000))));
+			alien.setMaxLife(score / 2000 + 50);
 		}
 		
-		if (Math.random() < 0.05) {
-			alien.addPowerUp(new ShootSizePowerUp((int) (Math.random() * 5 + 1)));
-		} else if (Math.random() < 0.03) {
-			alien.addPowerUp(new ShootDamagePowerUp((int) (Math.random() * 25 + 10)));
-		} else if (Math.random() < 0.05) {
-			alien.addPowerUp(new ShootSpeedPowerUp((int) (Math.random() * 5 + 1)));
-		} else if (Math.random() < 0.02) {
-			alien.addPowerUp(new HealPowerUp((int) (Math.random() * 50 + 50)));
-		} else if (Math.random() < 0.02) {
+		if (random.nextFloat() < 0.05) {
+			alien.addPowerUp(new ShootSizePowerUp((int) (random.nextFloat() * 4 + 4)));
+		} else if (random.nextFloat() < 0.03) {
+			alien.addPowerUp(new ShootDamagePowerUp((int) (random.nextFloat() * 20 + 20)));
+		} else if (random.nextFloat() < 0.05) {
+			alien.addPowerUp(new ShootSpeedPowerUp((int) (random.nextFloat() * 2 + 2)));
+		} else if (random.nextFloat() < 0.02) {
+			alien.addPowerUp(new HealPowerUp((int) (random.nextFloat() * 50 + 50)));
+		} else if (random.nextFloat() < 0.02) {
 			alien.addPowerUp(new ProtectorPowerUp(alien.getMaxLife() * 2));
-		} else if (Math.random() < 0.01) {
-			alien.addPowerUp(new IndestructablePowerUp(tweenManager, (float) (Math.random() * 5 + 5)));
+		} else if (random.nextFloat() < 0.01) {
+			alien.addPowerUp(new IndestructablePowerUp(tweenManager, (float) (random.nextFloat() * 5 + 5)));
 		}
 	}
 	
@@ -167,7 +172,7 @@ public class EnemyController {
 		@Override
 		public void onDamage(GameObject object, GameObject cause) {
 			tweenManager.killTarget(target);
-			float padding = 5;
+			float padding = 8;
 			Tween.to(target, GameObjectTween.SHAKE_X, 0.02f)
 	        .target(target.getX() + padding)
 	        .ease(TweenEquations.easeInOutQuad)
