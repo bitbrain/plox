@@ -12,6 +12,7 @@ import de.myreality.plox.GameObjectFactory;
 import de.myreality.plox.GameObjectListener;
 import de.myreality.plox.Resources;
 import de.myreality.plox.powerups.HealPowerUp;
+import de.myreality.plox.powerups.IndestructablePowerUp;
 import de.myreality.plox.powerups.ProtectorPowerUp;
 import de.myreality.plox.powerups.ShootDamagePowerUp;
 import de.myreality.plox.powerups.ShootSizePowerUp;
@@ -43,7 +44,7 @@ public class EnemyController {
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score * 250 / INTERVAL);
+		currentInterval = INTERVAL - (score * 100 / INTERVAL);
 		
 		if (currentInterval < 100) {
 			currentInterval = 100;
@@ -124,6 +125,8 @@ public class EnemyController {
 			alien.addPowerUp(new HealPowerUp(50));
 		} else if (Math.random() < 0.01) {
 			alien.addPowerUp(new ProtectorPowerUp(alien.getMaxLife() * 2));
+		} else {
+			alien.addPowerUp(new IndestructablePowerUp(tweenManager, 10f));
 		}
 	}
 	

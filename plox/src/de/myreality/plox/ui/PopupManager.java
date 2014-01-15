@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
-import de.myreality.plox.tweens.LabelTween;
+import de.myreality.plox.tweens.ActorTween;
 
 public class PopupManager implements TweenCallback {
 
@@ -78,13 +78,13 @@ public class PopupManager implements TweenCallback {
             stage.addActor(label);
             label.setPosition(x - label.getWidth() / 2f, Gdx.graphics.getHeight() - y - label.getHeight() / 2f);
             
-            Tween.to(label, LabelTween.ALPHA, duration)
+            Tween.to(label, ActorTween.ALPHA, duration)
              .target(0f)
             .ease(TweenEquations.easeInOutQuad)
             .setCallback(this)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .start(tweenManager);
-            Tween.to(label, LabelTween.POPUP, duration)
+            Tween.to(label, ActorTween.POPUP, duration)
              .target(y - MOVING_DISTANCE)
             .ease(TweenEquations.easeInOutQuad)
             .start(tweenManager);

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import de.myreality.plox.Scoreable;
-import de.myreality.plox.tweens.LabelTween;
+import de.myreality.plox.tweens.ActorTween;
 
 public class ScoreLabel extends Label {
 
@@ -30,6 +30,7 @@ public class ScoreLabel extends Label {
 		super("", style);
 		this.scoreable = scoreable;
 		this.tweenManager = tweenManager;
+		getColor().a = 0.5f;
 	}
 
 	public void reset() {
@@ -46,7 +47,7 @@ public class ScoreLabel extends Label {
 				tweenManager.killTarget(this);
 				Color c = getColor();
 				setColor(c.r, c.g, c.b, 1f);
-				Tween.to(this, LabelTween.ALPHA, 1).target(0.5f)
+				Tween.to(this, ActorTween.ALPHA, 1).target(0.5f)
 						.ease(TweenEquations.easeInOutQuad).start(tweenManager);
 			}
 

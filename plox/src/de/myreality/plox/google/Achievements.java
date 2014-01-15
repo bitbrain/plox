@@ -9,4 +9,5 @@ public class Achievements {
 	public static final String DESTROYER = "CgkIq8PF4ugWEAIQCA";
 	public static final String VETERAN = "CgkIq8PF4ugWEAIQCQ";
 	public static final String LEGEND = "CgkIq8PF4ugWEAIQCg";
+	public static final String KAMIKAZE = "CgkIq8PF4ugWEAIQCw";
 }

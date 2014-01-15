@@ -22,6 +22,9 @@ public class GameObject {
 	private List<GameObjectListener> listeners;
 	private Color color;
 	private List<PowerUpStrategy> powerUps;
+	private float millis, maxMillis;
+	
+	private boolean indestructable;
 
 	/**
 	 * @param y
@@ -86,19 +89,23 @@ public class GameObject {
 	}
 	
 	public void damage(int damage, GameObject cause) {
-		currentLife -= damage;
 		
-		if (currentLife < 0) {
-			currentLife = 0;
-		}
+		if (!isIndestructable()) {
 		
-		for (GameObjectListener l : listeners) {
-			l.onDamage(this, cause);
-		}
-		
-		if (damage == 0) {
+			currentLife -= damage;
+			
+			if (currentLife < 0) {
+				currentLife = 0;
+			}
+			
 			for (GameObjectListener l : listeners) {
-				l.onKill(this);
+				l.onDamage(this, cause);
+			}
+			
+			if (damage == 0) {
+				for (GameObjectListener l : listeners) {
+					l.onKill(this);
+				}
 			}
 		}
 	}
@@ -109,6 +116,18 @@ public class GameObject {
 	
 	public float getCenterY() {
 		return getY() + getHeight() / 2f;
+	}
+	
+	public void setIndestructable(float millis) {
+		if (millis > 0) {
+			this.indestructable = true;
+			this.millis = 0;
+			this.maxMillis = millis;
+		}
+	}
+	
+	public boolean isIndestructable() {
+		return indestructable;
 	}
 	
 	public Color getColor() {
@@ -131,7 +150,19 @@ public class GameObject {
 		this.texture = texture;
 	}
 	
+	public float getIndestructablePercentage() {
+		return 1f - millis / maxMillis;
+	}
+	
 	public void update(float delta) {
+		
+		millis += delta;
+		
+		if (millis > maxMillis) {
+			indestructable = false;
+			millis = 0;
+		}
+		
 		for (GameObjectStrategy strategy : strategies) {
 			strategy.update(delta, this);
 		}

@@ -46,6 +46,7 @@ import de.myreality.plox.graphics.ParticleRenderer;
 import de.myreality.plox.input.IngameControls;
 import de.myreality.plox.tweens.GameObjectTween;
 import de.myreality.plox.tweens.SpriteTween;
+import de.myreality.plox.ui.LifeBar;
 import de.myreality.plox.ui.PopupManager;
 import de.myreality.plox.ui.ScoreLabel;
 
@@ -142,7 +143,8 @@ public class IngameScreen implements Screen, GameContext {
 			((ScoreLabel)pointLabel).reset();
 			pointLabel.setFontScale(4);
 			pointLabel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3);
-
+			controls.clear();
+			controls.addActor(pointLabel);
 			Tween.to(planet, GameObjectTween.ALPHA, 2f).target(0.3f)
 					.setCallback(new TweenCallback() {
 						@Override
@@ -247,12 +249,14 @@ public class IngameScreen implements Screen, GameContext {
 			labelStyle.fontColor = new Color(1f, 1f, 1f, 1f);
 			pointLabel = new ScoreLabel(playerScore, tweenManager, labelStyle);
 			pointLabel.setPosition(80, Gdx.graphics.getHeight() - pointLabel.getHeight() - 80);
-			pointLabel.setFontScale(2f);
+			
 			controls.addActor(pointLabel);
 			
+			LifeBar bar = new LifeBar(player, tweenManager);
+			bar.setBounds(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 6f, Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 8);
+			controls.addActor(bar);
+			pointLabel.setFontScale(2f);
 			Gdx.input.setInputProcessor(controls);
-			
-
 			LabelStyle style = new LabelStyle();
 			style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			style.fontColor = Color.valueOf("ffffff");
@@ -435,17 +439,22 @@ public class IngameScreen implements Screen, GameContext {
 				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
 				b.damage(50, a);
 				
-				tweenManager.killTarget(b);
-				float padding = 5;
-				Tween.to(b, GameObjectTween.SHAKE_X, 0.02f)
-		        .target(b.getX() + padding)
-		        .ease(TweenEquations.easeInOutQuad)
-		        .repeatYoyo(20, 0).start(tweenManager);
-				
-				Tween.to(b, GameObjectTween.SHAKE_Y, 0.01f)
-		        .target(b.getY() + padding)
-		        .ease(TweenEquations.easeInOutQuad)
-		        .repeatYoyo(10, 0).start(tweenManager);
+				if (!b.isIndestructable()) {
+					tweenManager.killTarget(b);
+					float padding = 5;
+					Tween.to(b, GameObjectTween.SHAKE_X, 0.02f)
+			        .target(b.getX() + padding)
+			        .ease(TweenEquations.easeInOutQuad)
+			        .repeatYoyo(20, 0).start(tweenManager);
+					
+					Tween.to(b, GameObjectTween.SHAKE_Y, 0.01f)
+			        .target(b.getY() + padding)
+			        .ease(TweenEquations.easeInOutQuad)
+			        .repeatYoyo(10, 0).start(tweenManager);
+				} else {
+					playerScore.addScore(25);
+					popupManager.popup(b.getCenterX(), b.getCenterY(), "25");
+				}
 			}
 		}
 	}

@@ -32,6 +32,8 @@ public final class Resources {
 	public static final String POWERUP_SIZE = PATH + "powerup-size.png";
 	public static final String POWERUP_SPEED = PATH + "powerup-speed.png";
 	public static final String POWERUP_PROTECTOR = PATH + "powerup-protector.png";
+	public static final String POWERUP_IMMORTAL = PATH + "powerup-immortal.png";
+	public static final String LIFE = PATH + "life.png";
 	
 	public static final String PARTICLES_BLUE = PATH + "particle-blue";
 	public static final String PARTICLES_SHOT = PATH + "particle-shot";
@@ -76,6 +78,8 @@ public final class Resources {
 		manager.load(POWERUP_SIZE, Texture.class);
 		manager.load(POWERUP_SPEED, Texture.class);
 		manager.load(POWERUP_PROTECTOR, Texture.class);
+		manager.load(POWERUP_IMMORTAL, Texture.class);
+		manager.load(LIFE, Texture.class);
 		
 		manager.load(PARTICLES_BLUE, ParticleEffect.class);
 		manager.load(PARTICLES_SHOT, ParticleEffect.class);
