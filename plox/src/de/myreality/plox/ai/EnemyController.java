@@ -70,7 +70,9 @@ public class EnemyController {
 			GameObjectFactory f = screen.getFactory();
 			
 			for (int i = 0; i < amount; ++i) {
-				GameObject alien = f.createAlien(0, 0);	
+				GameObject alien = f.createAlien(0, 0);
+				alien.addListener(screen.getAchievementManager());
+				
 				int x = 0;
 				int y = 0;
 				

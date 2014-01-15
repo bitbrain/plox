@@ -434,9 +434,10 @@ public class IngameScreen implements Screen, GameContext {
 
 			if (a.getType().equals(GameObjectType.ALIEN)
 					&& b.getType().equals(GameObjectType.PLAYER)) {
-				remove(a);
+
 				Sound sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 				sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
+				a.damage(50, b);
 				b.damage(50, a);
 				
 				if (!b.isIndestructable()) {

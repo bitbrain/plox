@@ -13,6 +13,8 @@ public class AchievementManager implements ScoreableListener, GameObjectListener
 	
 	private GoogleInterface google;
 	
+	private int killCount;
+	
 	public AchievementManager(GoogleInterface google) {
 		collectedPoints = 0;
 		this.google = google;
@@ -66,6 +68,17 @@ public class AchievementManager implements ScoreableListener, GameObjectListener
 				google.incrementAchievement(Achievements.PROTECTOR_I, 1);
 				google.incrementAchievement(Achievements.PROTECTOR_II, 1);
 				google.incrementAchievement(Achievements.PROTECTOR_III, 1);
+			}
+		} else if (cause.getType().equals(GameObjectType.PLAYER)) {
+			
+			if (object.isDead() && cause.isIndestructable()) {
+				killCount++;
+			} else if (!cause.isIndestructable()) {
+				killCount = 0;
+			} 			
+			
+			if (killCount >= 30) {
+				google.submitAchievement(Achievements.KAMIKAZE);
 			}
 		}
 	}
