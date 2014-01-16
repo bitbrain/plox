@@ -22,7 +22,6 @@ public class MenuControls extends Stage implements InputProcessor {
 	public MenuControls(float width, float height, boolean keepAspectRatio,
 			SpriteBatch batch, PloxGame game) {
 		super(width, height, keepAspectRatio, batch);
-		Gdx.input.setCatchBackKey(true);
 		this.game = game;
 	}
 
@@ -33,7 +32,6 @@ public class MenuControls extends Stage implements InputProcessor {
 	 */
 	public MenuControls(float width, float height, boolean keepAspectRatio, PloxGame game) {
 		super(width, height, keepAspectRatio);
-		Gdx.input.setCatchBackKey(true);
 		this.game = game;
 	}
 
@@ -43,7 +41,6 @@ public class MenuControls extends Stage implements InputProcessor {
 	 */
 	public MenuControls(float width, float height, PloxGame game) {
 		super(width, height);
-		Gdx.input.setCatchBackKey(true);
 		this.game = game;
 	}
 

@@ -51,6 +51,8 @@ public class ParticleRenderer  implements GameObjectListener{
 	private ParticleManager particleManager;
 	
 	private Map<GameObject, ParticleEffect> effects;
+	
+	private Map<GameObject, Integer> particleCounts;
 
 	// ===========================================================
 	// Constructors
@@ -59,6 +61,7 @@ public class ParticleRenderer  implements GameObjectListener{
 	public ParticleRenderer() {
 		particleManager = new ParticleManager();
 		effects = new HashMap<GameObject, ParticleEffect>();
+		particleCounts = new HashMap<GameObject, Integer>();
 	}
 
 	// ===========================================================
@@ -84,6 +87,7 @@ public class ParticleRenderer  implements GameObjectListener{
 	@Override
 	public void onRemove(GameObject object) {
 		ParticleEffect effect = effects.remove(object);
+		particleCounts.remove(object);
 		
 		if (effect != null) {
 			particleManager.setEndless(effect, false);
@@ -95,6 +99,7 @@ public class ParticleRenderer  implements GameObjectListener{
 				ParticleEffect eff = Resources.get(Resources.PARTICLES_EXPLOSION, ParticleEffect.class);
 				particleManager.unload(effect);
 				effect = particleManager.create(eff, false);
+				particleManager.setParticleCount(effect, 50);
 				effect.setPosition(object.getCenterX(), object.getCenterY());
 				effect.start();
 			} else if (!ScreenUtils.isOutOfScreen(object)){
@@ -116,8 +121,19 @@ public class ParticleRenderer  implements GameObjectListener{
 	@Override
 	public void onMove(GameObject object) {
 		ParticleEffect effect = effects.get(object);
-		
-		if (effect != null) {		
+		Integer count = particleCounts.get(object);
+		if (effect != null) {	
+			
+			if (object.isIced()) {
+				if (particleManager.getParticleCount(effect) == count) {
+					particleManager.setParticleCount(effect, count / 20);
+				}
+			} else {
+				if (particleManager.getParticleCount(effect) != count) {
+					particleManager.setParticleCount(effect, count);
+				}
+			}
+			
 			if (object.getType().equals(GameObjectType.ALIEN)) {				
 				effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
 			} else {
@@ -133,13 +149,15 @@ public class ParticleRenderer  implements GameObjectListener{
 			ParticleEffect effect = particleManager.create(eff, true);			
 			effect.setPosition(object.getCenterX(), object.getCenterY() + object.getHeight() / 3f);
 			effects.put(object, effect);
-		} else
+			particleCounts.put(object, particleManager.getParticleCount(effect));
+		}
 		
 		if (object.getType().equals(GameObjectType.PLAYER)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_SHOT, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
+			particleCounts.put(object, particleManager.getParticleCount(effect));
 		} else
 		
 		if (object.getType().equals(GameObjectType.SHOT)) {
@@ -147,13 +165,15 @@ public class ParticleRenderer  implements GameObjectListener{
 			ParticleEffect effect = particleManager.create(eff, true);				
 			effect.setPosition(object.getCenterX(), object.getCenterY());
 			effects.put(object, effect);
+			particleCounts.put(object, particleManager.getParticleCount(effect));
 		} else
 		
 		if (object.getType().equals(GameObjectType.POWERUP)) {
 			ParticleEffect eff = Resources.get(Resources.PARTICLES_POWERUP, ParticleEffect.class);
 			ParticleEffect effect = particleManager.create(eff, true);				
 			effect.setPosition(object.getCenterX(), object.getCenterY());
-			
+
+			particleCounts.put(object, particleManager.getParticleCount(effect));
 			effects.put(object, effect);	
 			
 			// Change particle color

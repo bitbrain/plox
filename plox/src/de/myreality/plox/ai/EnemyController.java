@@ -49,20 +49,20 @@ public class EnemyController {
 	public void update(float delta) {
 		
 		int score = screen.getPlayerScore().getScore();
-		currentInterval = INTERVAL - (score * 100 / INTERVAL);
+		currentInterval = INTERVAL - (score * 50 / INTERVAL);
 		
-		if (currentInterval < 100) {
-			currentInterval = 100;
+		if (currentInterval < 500) {
+			currentInterval = 500;
 		}
 		
 		if (timer.getTicks() > currentInterval) {
 			
-			int amount = (int) (random.nextFloat() * 3f);
+			int amount = (int) (random.nextFloat() * 2f) + 1;
 			
 			if (random.nextFloat() < 0.3) {
-				amount = (int) (Math.random() * 3 + 3);
+				amount = (int) (Math.random() * 2 + 2);
 			} else if (random.nextFloat() < 0.05) {
-				amount = (int) (Math.random() * 6 + 3);
+				amount = (int) (Math.random() * 4 + 2);
 			}
 			
 			spawnAlien(amount);
@@ -110,16 +110,16 @@ public class EnemyController {
 
 		double typeFactor = Math.random();
 		int score = screen.getPlayerScore().getScore();
-		if (typeFactor > 0.2) {
-			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (70 + 40 * random.nextFloat())));
-			alien.setMaxLife(score / 500 + 60);
+		if (typeFactor > 0.1) {
+			alien.addStrategy(new TargetStrategy(screen.getPlanet(), (float) (50 + 50 * random.nextFloat())));
+			alien.setMaxLife(score / 100 + 60);
 		} else {
 			alien.setTexture(Resources.get(Resources.ALIEN2, Texture.class));
 			int size = Gdx.graphics.getHeight() / 8;
 			alien.setWidth(size);
 			alien.setHeight(size);
-			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (100 + random.nextFloat() * (score / 1000))));
-			alien.setMaxLife(score / 2000 + 50);
+			alien.addStrategy(new TargetStrategy(screen.getPlayer(), (float) (400 + random.nextFloat() * (score / 100))));
+			alien.setMaxLife(score / 500 + 50);
 		}
 		
 		if (random.nextFloat() < 0.05) {

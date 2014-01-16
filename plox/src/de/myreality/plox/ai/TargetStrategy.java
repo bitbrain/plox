@@ -37,6 +37,10 @@ public class TargetStrategy implements GameObjectStrategy {
 		time += delta * 4;
 		float bounceFactor = (float) Math.cos(time) * 2;
 		
+		if (source.isIced()) {
+			speed = 25f;
+		}
+		
 		source.setX(source.getX() + vec.x * speed * delta);
 		source.setY(source.getY() + vec.y * speed * delta - bounceFactor);		
 	}

@@ -35,7 +35,6 @@ public class IngameControls extends Stage implements InputProcessor {
 		super(width, height, keepAspectRatio, batch);
 		this.screen = screen;		
 		this.game = game;
-		Gdx.input.setCatchBackKey(true);
 	}
 
 	/**
@@ -46,7 +45,6 @@ public class IngameControls extends Stage implements InputProcessor {
 	public IngameControls(float width, float height, boolean keepAspectRatio, IngameScreen screen, PloxGame game) {
 		super(width, height, keepAspectRatio);
 		this.screen = screen;
-		Gdx.input.setCatchBackKey(true);
 		this.game = game;
 	}
 
@@ -57,7 +55,6 @@ public class IngameControls extends Stage implements InputProcessor {
 	public IngameControls(float width, float height, IngameScreen screen, PloxGame game) {
 		super(width, height);
 		this.screen = screen;
-		Gdx.input.setCatchBackKey(true);
 		this.game = game;
 	}
 	
@@ -92,76 +89,97 @@ public class IngameControls extends Stage implements InputProcessor {
 		
 		return state;
 	}
+	
+	
+
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		
+		if (Gdx.app.getType().equals(ApplicationType.Desktop) && Gdx.input.isTouched()) {	
+			
+			int screenX = Gdx.input.getX();
+			int screenY = Gdx.input.getY();
+			
+			handleShot(screenX, screenY);
+		}
+	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		boolean touched = super.touchDragged(screenX, screenY, pointer);	
 		
-		if (!touched && !screen.isOver() && pointer == 0 && !Gdx.app.getType().equals(ApplicationType.Desktop)) {
-		
-			GameObject player = screen.getPlayer();
+		if (!Gdx.app.getType().equals(ApplicationType.Desktop)) {
+			if (!touched && !screen.isOver() && pointer == 0) {
 			
-			screenX -= player.getWidth() / 2f;
-			screenY -= player.getHeight() / 2f;
-			
-			if (screenX - player.getWidth() /2f < 0) {
-				screenX = 0;
-			}
-			
-			if (screenY - player.getHeight() /2f < 0) {
-				screenY = 0;
-			}
-			
-			if (screenX > Gdx.graphics.getWidth()) {
-				screenX = Gdx.graphics.getWidth();
-			}
-			
-			if (screenY > Gdx.graphics.getHeight()) {
-				screenY = Gdx.graphics.getHeight();
-			}
-			
-			Vector2 vec = new Vector2((float)screenX - player.getX(), (float)screenY - player.getY());		
-			
-			final float speed = vec.len() / 4f;
-			vec.nor();
-			
-			player.setX(player.getX() + vec.x * speed);
-			player.setY(player.getY() + vec.y * speed);
-		} else if (!touched && !screen.isOver() && Gdx.app.getType().equals(ApplicationType.Desktop) || pointer == 1) {
-			
-			Player player = screen.getPlayer();
-			
-			boolean shoot = false;
-			
-			
-			int currentInterval = (int) (5000 / player.getShootSpeed());
-			
-			if (timer != null && timer.isRunning()) {
-				if (timer.getTicks() > currentInterval) {
-					shoot = true;
-					timer.reset();
-				}
-			} else {
-				timer = new Timer();
-				shoot = true;
-				timer.start();
-			}
-			
+				GameObject player = screen.getPlayer();
 				
-			if (shoot) {
-				GameObjectFactory f = screen.getFactory();
-				GameObject p = screen.getPlayer();
-				GameObject shot = f.createShot(
-						(int)(p.getX() + p.getWidth() / 2f),
-						(int)(p.getY() + p.getHeight() / 2f), 
-						screenX, screenY, 1600, 
-						player.getShootSize(),
-						player.getShootDamage());
-				screen.add(shot);
+				screenX -= player.getWidth() / 2f;
+				screenY -= player.getHeight() / 2f;
+				
+				if (screenX - player.getWidth() /2f < 0) {
+					screenX = 0;
+				}
+				
+				if (screenY - player.getHeight() /2f < 0) {
+					screenY = 0;
+				}
+				
+				if (screenX > Gdx.graphics.getWidth()) {
+					screenX = Gdx.graphics.getWidth();
+				}
+				
+				if (screenY > Gdx.graphics.getHeight()) {
+					screenY = Gdx.graphics.getHeight();
+				}
+				
+				Vector2 vec = new Vector2((float)screenX - player.getX(), (float)screenY - player.getY());		
+				
+				final float speed = vec.len() / 4f;
+				vec.nor();
+				
+				player.setX(player.getX() + vec.x * speed);
+				player.setY(player.getY() + vec.y * speed);
+			} else if (!touched || pointer == 1 && !screen.isOver()) {
+				handleShot(screenX, screenY);
+				return true;
 			}
 		}
 		
 		return touched;
+	}
+	
+	private void handleShot(int screenX, int screenY) {
+		Player player = screen.getPlayer();
+		
+		boolean shoot = false;
+		
+		
+		int currentInterval = (int) (5000 / player.getShootSpeed());
+		
+		if (timer != null && timer.isRunning()) {
+			if (timer.getTicks() > currentInterval) {
+				shoot = true;
+				timer.reset();
+			}
+		} else {
+			timer = new Timer();
+			shoot = true;
+			timer.start();
+		}
+		
+			
+		if (shoot) {
+			GameObjectFactory f = screen.getFactory();
+			GameObject p = screen.getPlayer();
+			GameObject shot = f.createShot(
+					(int)(p.getX() + p.getWidth() / 2f),
+					(int)(p.getY() + p.getHeight() / 2f), 
+					screenX, screenY, 1600, 
+					player.getShootSize(),
+					player.getShootDamage());
+			screen.add(shot);
+		}
 	}
 	
 }

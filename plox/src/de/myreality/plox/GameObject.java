@@ -24,6 +24,8 @@ public class GameObject {
 	private List<PowerUpStrategy> powerUps;
 	private float millis, maxMillis;
 	
+	private float iced;
+	
 	private boolean indestructable;
 
 	/**
@@ -157,6 +159,11 @@ public class GameObject {
 	public void update(float delta) {
 		
 		millis += delta;
+		iced -= delta;
+		
+		if (iced < 0) {
+			iced = 0;
+		} 
 		
 		if (millis > maxMillis) {
 			indestructable = false;
@@ -169,9 +176,22 @@ public class GameObject {
 	}
 	
 	public void draw(SpriteBatch batch) {
-		batch.setColor(color.r, color.g, color.b, color.a);
+		
+		if (!isIced()) {
+			batch.setColor(color.r, color.g, color.b, color.a);
+		} else {
+			batch.setColor(new Color(0.5f, 0.7f, 1f, 1f));
+		}
 		batch.draw(texture, x, y, getWidth() / 2f, getHeight() / 2f, getWidth(), getHeight(), 1f, 1f, getRotation(), 0, 0, texture.getWidth(), texture.getHeight(), false, true);
 		
+	}
+	
+	public void setIced(float iceTime) {
+		iced = iceTime;
+	}
+	
+	public boolean isIced() {
+		return iced > 0f;
 	}
 	
 	public int getWidth() {

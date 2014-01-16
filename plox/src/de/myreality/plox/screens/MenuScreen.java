@@ -77,6 +77,7 @@ public class MenuScreen implements Screen {
 			animateLabel(text);
 			showGoogleButtons();
 			Gdx.input.setInputProcessor(stage);
+			Gdx.input.setCatchBackKey(true);
 		}
 	}
 

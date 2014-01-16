@@ -46,7 +46,7 @@ public class IndestructablePowerUp implements PowerUpStrategy {
 	private void animate(final GameObject o, final PopupManager manager) {
 		o.getColor().a = 0.7f;
 		tweenManager.killTarget(o);
-		Tween.to(o, GameObjectTween.ALPHA, 0.7f).target(0.4f)
+		Tween.to(o, GameObjectTween.ALPHA, 0.4f).target(0.2f)
 				.ease(TweenEquations.easeInOutQuad)
 				.setCallback(new TweenCallback() {
 
@@ -55,6 +55,7 @@ public class IndestructablePowerUp implements PowerUpStrategy {
 						if (o.isIndestructable()) {
 							animate(o, manager);
 						} else {
+							o.getColor().a = 1f;
 							LabelStyle style = new LabelStyle();
 							style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 							style.fontColor = new Color(0.6f, 0.0f, 1f, 1f);

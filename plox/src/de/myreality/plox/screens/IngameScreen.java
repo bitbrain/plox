@@ -124,7 +124,6 @@ public class IngameScreen implements Screen, GameContext {
 
 		if (over && !fadeActivated) {
 			fadeActivated = true;
-			particleRenderer.clear();
 
 			for (GameObject o : objects) {
 				Tween.to(o, GameObjectTween.ALPHA, 2f).target(0.3f).ease(TweenEquations.easeInOutQuad)
@@ -205,7 +204,7 @@ public class IngameScreen implements Screen, GameContext {
 		batch.end();
 		controls.draw();
 
-		if (player.isDead() || planet.isDead()) {
+		if (!over && player.isDead() || planet.isDead()) {
 			gameover();
 		}
 	}
@@ -235,6 +234,7 @@ public class IngameScreen implements Screen, GameContext {
 			controls.addActor(bar);
 			pointLabel.setFontScale(2f);
 			Gdx.input.setInputProcessor(controls);
+			Gdx.input.setCatchBackKey(true);
 			LabelStyle style = new LabelStyle();
 			style.font = Resources.get(Resources.BITMAP_FONT_REGULAR, BitmapFont.class);
 			style.fontColor = Color.valueOf("ffffff");
@@ -360,9 +360,12 @@ public class IngameScreen implements Screen, GameContext {
 	}
 
 	public void gameover() {
-		GoogleInterface google = game.getGoogle();
-		google.submitScore(playerScore.getScore());
-		over = true;
+		if (!over) {
+			GoogleInterface google = game.getGoogle();
+			google.submitScore(playerScore.getScore());
+			over = true;
+			particleRenderer.clear();
+		}
 	}
 
 	private class CollisionHandler {
@@ -383,6 +386,7 @@ public class IngameScreen implements Screen, GameContext {
 					
 					Shot shot = (Shot)a;					
 					b.damage(shot.getDamage(), shot);
+					b.setIced(1.5f);
 					
 					Sound sound = Resources.get(Resources.SOUND_IMPACT, Sound.class);
 					sound.play(0.4f, (float)(1.0f + Math.random() * 0.4), (float)(1.0f + Math.random() * 0.4));
@@ -390,7 +394,7 @@ public class IngameScreen implements Screen, GameContext {
 					if (b.isDead()) {		
 						sound = Resources.get(Resources.SOUND_EXPLODE, Sound.class);
 						sound.play(1f, (float)(0.3f + Math.random() * 0.6), (float)(1.0f + Math.random() * 0.4));
-						playerScore.addScore(b.getMaxLife());
+						playerScore.addScore(50);
 						popupManager.popup(b.getCenterX(), b.getCenterY(), "50");						
 					} else {
 						playerScore.addScore(10);
@@ -418,7 +422,7 @@ public class IngameScreen implements Screen, GameContext {
 				
 				if (!b.isIndestructable()) {
 					
-					b.damage(20, a);
+					b.damage(100, a);
 					a.kill();
 					
 					tweenManager.killTarget(b);

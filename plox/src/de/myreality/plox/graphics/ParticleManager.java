@@ -78,6 +78,25 @@ public class ParticleManager {
 		}
 	}
 	
+	public void setParticleCount(ParticleEffect effect, int count) {
+		for (ParticleEmitter emitter : effect.getEmitters()) {
+			emitter.setMaxParticleCount(count);
+		}
+	}
+	
+	public int getParticleCount(ParticleEffect effect) {
+		
+		int count = 0;
+		
+		for (ParticleEmitter emitter : effect.getEmitters()) {
+			if (count < emitter.getMaxParticleCount()) {
+				count = emitter.getMaxParticleCount();
+			}
+		}
+		
+		return count;
+	}
+	
 	public void render(SpriteBatch batch, float delta) {
 		
 		for (Entry<ParticleEffect, Boolean> entries : effects.entrySet()) {
